@@ -268,6 +268,10 @@ public class PlayerController : MonoBehaviour {
 	public void Stun()
 	{
 		Debug.Log ("Stunned!");
+	
+		GameObject starPart = Instantiate (Resources.Load<GameObject> ("Prefabs/StarParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
+		starPart.transform.parent = this.transform;
+		Destroy (starPart, 3);
 
 		// Set state to punching
 		pState = playerState.Stunned;
