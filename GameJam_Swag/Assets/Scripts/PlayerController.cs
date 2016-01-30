@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour {
 	private Vector2 movementVector;
 
 	public PlayerManager playerManager;
+	public GameManager gameManager;
+
     public Camera mainCamera;
 	private int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
