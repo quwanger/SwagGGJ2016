@@ -52,7 +52,7 @@ public class PlayerManager : MonoBehaviour {
 				case 3:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Moose;
 					break;
-				defaul:
+				default:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
 					break;
 				}

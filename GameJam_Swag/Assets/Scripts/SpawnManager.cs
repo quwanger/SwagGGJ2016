@@ -9,8 +9,10 @@ public class SpawnManager : MonoBehaviour {
 	public const int maxSequence = 7;
 	public const int minSequence = 3;
 
-	public GameObject mapleLeaf;
+	public GameManager gameManager;
 
+	public GameObject mapleLeaf;
+	
 	public int colorCount;
 	public int sequenceCount;
 
@@ -22,7 +24,7 @@ public class SpawnManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
 	}
 
 	public void Initiate()
@@ -62,9 +64,17 @@ public class SpawnManager : MonoBehaviour {
 		gameHasStarted = true;
 		Debug.Log ("GAME HAS STARTED");
 
+		// Create player count + 1 leaves and spawn them on the map with a color
 		for (int i=0; i<this.gameObject.GetComponent<PlayerManager>().playerCount+1; i++){
 			GameObject leaf = SpawnLeaf();
-			leaf.GetComponent<MapleLeaf>().leafColor = possibleColors[Random.Range(0, colorCount)];
+
+			List<Color> activeColors = new List<Color>();
+
+			foreach (PlayerController pc in gameManager.activePlayers) {
+				activeColors.Add(pc.activeColor);
+			}
+
+			leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, colorCount)];
 			leavesOnMap.Add(leaf);
 		}
 	}

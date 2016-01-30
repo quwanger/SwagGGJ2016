@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	private Vector2 movementVector;
 
 	public PlayerManager playerManager;
+	public GameManager gameManager;
 
 	private int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour {
 	public float punchResetTime = 0f;
 
 	public List<Color> myColors = new List<Color>();
+	public Color activeColor;
 
 	public enum playerState
 	{
@@ -42,6 +44,8 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		gameManager = FindObjectOfType<GameManager> ();
+
 		rb = this.gameObject.GetComponent<Rigidbody2D> ();
 				 
 		this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + character.ToString() + "_Body");
@@ -52,11 +56,14 @@ public class PlayerController : MonoBehaviour {
 
 	public void StartRound()
 	{
+		gameManager.activePlayers.Add (this);
+
 		myColors.Clear ();
 		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
 		for (int i=0; i<sm.sequenceCount; i++){
 			myColors.Add(sm.possibleColors[Random.Range(0, sm.colorCount)]);
 		}
+		activeColor = myColors [0];
 	}
 	
 	// Update is called once per frame
