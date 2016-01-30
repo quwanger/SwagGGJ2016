@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using XInputDotNetPure; // Required in C#
 
 public class PlayerController : MonoBehaviour {
 
@@ -45,6 +46,9 @@ public class PlayerController : MonoBehaviour {
 	public float movementSpeed = 4f;
 	public float dragConstant = 0.09f;
 
+	//For vibration
+	public float vibrationIntensity = 0.0f;
+
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
@@ -75,8 +79,20 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// Set vibration intensity to decrease by half until it reaches 0
+		if (vibrationIntensity > 1){
+			vibrationIntensity /= 2;
+		} else if(vibrationIntensity < 1){
+			vibrationIntensity = 0;
+		}
+
+		Debug.Log (vibrationIntensity);
 
 //----- HANDLES PLAYER MOVEMENT
+		if (pState == playerState.Idle) {
+			GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
+		}
+
 		if (pState != playerState.Stunned) {
 			movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * movementSpeed;
 			movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * movementSpeed * -1;
@@ -91,15 +107,24 @@ public class PlayerController : MonoBehaviour {
 			rb.velocity = movementVector;
 			this.gameObject.transform.localEulerAngles = new Vector3 (0f, 0f, 0f);
 		} else {
+			vibrationIntensity = 100.0f;
+
+			GamePad.SetVibration(WindowsCheckControllerToVibrate(), vibrationIntensity, vibrationIntensity);
+
 			if(Time.time > (stunStartTime + playerManager.stunDuration))
 			{
 				pState = playerState.Idle;
+
+				GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
 			}
 		}
 
 //----- HANDLES PLAYER ACTION
 		if(Input.GetAxis (("RightTrigger" + playerId).ToString()) > 0f)
 		{
+			// Actual vibration
+			GamePad.SetVibration(WindowsCheckControllerToVibrate(), vibrationIntensity, vibrationIntensity);
+
 			if(Time.time > punchResetTime)
 			{
 				switch(pState)
@@ -133,6 +158,9 @@ public class PlayerController : MonoBehaviour {
 
 	private void Punch()
 	{
+		// Set vibration intensity to a 
+		vibrationIntensity = 200.0f;
+
 		//mainCamera.GetComponent<CameraShake> ().Shake ();
 		//mainCamera.GetComponent<CameraZoom> ().ZoomIn (this.gameObject);
 		pState = playerState.Punching;
@@ -147,5 +175,26 @@ public class PlayerController : MonoBehaviour {
 		pState = playerState.Stunned;
 		stunStartTime = Time.time;
 		leafInArms = null;
+	}
+
+	// To switch between our player indexes to assign vibration
+	public XInputDotNetPure.PlayerIndex WindowsCheckControllerToVibrate() {
+		switch (playerId) {
+			case(1):
+				return PlayerIndex.One;
+				break;
+			case(2):
+				return PlayerIndex.Two;
+				break;
+			case(3):
+				return PlayerIndex.Three;
+				break;
+			case(4):
+				return PlayerIndex.Four;
+				break;
+			default:
+				return PlayerIndex.One;
+				break;
+		}
 	}
 }
