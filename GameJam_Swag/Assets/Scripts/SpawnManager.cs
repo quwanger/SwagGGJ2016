@@ -53,7 +53,7 @@ public class SpawnManager : MonoBehaviour {
 	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
-		if (this.gameObject.GetComponent<PlayerManager> ().playerCount >= 1) {
+		if (gameManager.activePlayers.Count >= 1 && !gameHasStarted) {
 			StartGame ();
 		}
 	}
@@ -70,7 +70,7 @@ public class SpawnManager : MonoBehaviour {
 		Debug.Log ("GAME HAS STARTED");
 
 		// Create player count + 1 leaves and spawn them on the map with a color
-		for (int i=0; i<this.gameObject.GetComponent<PlayerManager>().playerCount+1; i++){
+		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
 			SpawnLeaf();
 		}
 	}

@@ -236,19 +236,14 @@ public class PlayerController : MonoBehaviour {
 		switch (playerId) {
 			case(1):
 				return PlayerIndex.One;
-				break;
 			case(2):
 				return PlayerIndex.Two;
-				break;
 			case(3):
 				return PlayerIndex.Three;
-				break;
 			case(4):
 				return PlayerIndex.Four;
-				break;
 			default:
 				return PlayerIndex.One;
-				break;
 		}
 	}
 }
