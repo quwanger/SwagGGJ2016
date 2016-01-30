@@ -27,6 +27,7 @@ public class SpawnManager : MonoBehaviour {
 		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
 	}
 
+	// Initialize possible colors array
 	public void Initiate()
 	{
 		possibleColors [0] = new Color (1f, 0, 0);
@@ -36,8 +37,11 @@ public class SpawnManager : MonoBehaviour {
 		possibleColors [4] = new Color (0, 1f, 1f);
 		possibleColors [5] = new Color (0, 0, 1f);
 		possibleColors [6] = new Color (0.5f, 0, 1f);
-		
+
+		// Set amount of colors and length of sequence
 		BeginRound ();
+
+		// Start game if there's more than 1 player 
 		CheckStart ();
 	}
 	
@@ -46,6 +50,7 @@ public class SpawnManager : MonoBehaviour {
 	
 	}
 
+	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
 		if (this.gameObject.GetComponent<PlayerManager> ().playerCount >= 1) {
@@ -70,6 +75,7 @@ public class SpawnManager : MonoBehaviour {
 		}
 	}
 
+	// Creates an instance of leaf with a spawn p0osition
 	public void SpawnLeaf()
 	{
 		List<Color> activeColors = new List<Color>();

@@ -7,10 +7,10 @@ public class PlayerManager : MonoBehaviour {
 	private bool[] activePlayers = new bool[4];
 	private GameObject[] playerGameObjects = new GameObject[4];
 
+	private GameManager gameManager;
+
 	public float stunDuration = 2.0f;
-
-	public int playerCount = 0;
-
+	
 	public enum PlayerCharacter{
 		Loon,
 		Beaver,
@@ -20,6 +20,8 @@ public class PlayerManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		gameManager = FindObjectOfType<GameManager> ();
+
 		for(int i=0; i<activePlayers.Length; i++)
 		{
 			activePlayers[i] = false;
@@ -59,13 +61,21 @@ public class PlayerManager : MonoBehaviour {
 				}
 				newPlayer.GetComponent<PlayerController>().playerManager = this;
 				playerGameObjects [i] = newPlayer;
-				playerCount++;
 				//this.gameObject.GetComponent<SpawnManager>().CheckStart();
 			} else if (Input.GetButtonDown (("Select" + (i+1)).ToString()) && activePlayers [i]) {
 				activePlayers [i] = false;
+
+				foreach (PlayerController pc in gameManager.activePlayers) {
+					// If the type of the deleted character is in the list of active characters, remove it from active characters
+					if(pc.character == playerGameObjects [i].GetComponent<PlayerController>().character) {
+						gameManager.activePlayers.Remove(pc);
+						break;
+					}
+				}
+
 				Debug.Log ("KILL PLAYER " + (i+1));
 				Destroy (playerGameObjects [i]);
-				playerCount--;
+
 			}
 		}
 	}
