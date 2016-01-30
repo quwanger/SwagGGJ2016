@@ -5,7 +5,7 @@ public class Punch : MonoBehaviour {
 
 	public float punchStartTime;
 	private float punchDuration = 0.3f;
-	public float punchRecharge = 2.0f;
+	public float punchRecharge = 0.5f;
 	public float punchRechargeCarry = 0.3f;
 
 	// Use this for initialization
@@ -58,11 +58,11 @@ public class Punch : MonoBehaviour {
 	private void EndPunch(bool toIdle)
 	{
 		if (toIdle) {
-			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Idle;
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRecharge);
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Idle;
 		} else {
-			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Carrying;
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRechargeCarry);
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Carrying;
 		}
 
 		this.gameObject.SetActive(false);
