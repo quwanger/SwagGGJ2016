@@ -1,0 +1,8 @@
+GameJam_Swag/Library/
+GameJam_Swag/Temp/
+/*.userprefs
+/*.csproj
+/*unityproj
+*.stackdump
+sysinfo.txt
+
