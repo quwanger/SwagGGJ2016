@@ -45,6 +45,7 @@ public class Base : MonoBehaviour {
 						{
 							gems[player.currentGemIndex].GetComponent<Gem>().ActivateGem();
 							player.activeColor = player.myColors[player.currentGemIndex];
+							player.playerShadow.color = player.activeColor;
 							player.gameManager.spawnManager.SpawnLeaf();
 						}
 					}

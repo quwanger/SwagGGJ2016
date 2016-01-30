@@ -30,13 +30,13 @@ public class SpawnManager : MonoBehaviour {
 	// Initialize possible colors array
 	public void Initiate()
 	{
-		possibleColors [0] = new Color (1f, 0, 0);
-		possibleColors [1] = new Color (1f, 0.5f, 0);
-		possibleColors [2] = new Color (1f, 1f, 0);
-		possibleColors [3] = new Color (0, 1f, 0);
-		possibleColors [4] = new Color (0, 1f, 1f);
-		possibleColors [5] = new Color (0, 0, 1f);
-		possibleColors [6] = new Color (0.5f, 0, 1f);
+		possibleColors [0] = new Color (255f/255f, 44f/255f, 0f/255f);
+		possibleColors [1] = new Color (0f/255f, 246f/255f, 255f/255f);
+		possibleColors [2] = new Color (255f/255f, 252f/255f, 0f/255f);
+		possibleColors [3] = new Color (0f/255f, 252f/255f, 0f/255f);
+		possibleColors [4] = new Color (196f/255f, 0f/255f, 252f/255f);
+		possibleColors [5] = new Color (255f/255f, 175f/255f, 218f/255f);
+		possibleColors [6] = new Color (255f/255f, 146f/255f, 0f/255f);
 
 		// Set amount of colors and length of sequence
 		BeginRound ();
