@@ -31,11 +31,11 @@ public class Gem : MonoBehaviour {
 	public void ActivateGem()
 	{
 		isActiveGem = true;
-		transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemOn");
 	}
 
 	public void DeactivateGem()
 	{
+		transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemOn");
 		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
 		isActiveGem = false;
 	}

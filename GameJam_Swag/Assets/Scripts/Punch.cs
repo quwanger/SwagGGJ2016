@@ -46,6 +46,8 @@ public class Punch : MonoBehaviour {
 			{
 				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
 			}
+			other.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+			other.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 			other.gameObject.GetComponent<Collider2D>().isTrigger = true;
 			other.gameObject.transform.parent = this.transform.parent;
 			other.gameObject.transform.position = this.transform.position;
@@ -65,6 +67,7 @@ public class Punch : MonoBehaviour {
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Carrying;
 		}
 
+		this.gameObject.transform.parent.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/" + this.transform.parent.parent.GetComponent<PlayerController>().character.ToString () + "_Body") as Sprite;
 		this.gameObject.SetActive(false);
 	}
 }
