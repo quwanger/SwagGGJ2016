@@ -7,6 +7,8 @@ public class Base : MonoBehaviour {
 	public int playerId;
 	public List<GameObject> gems = new List<GameObject>();
 
+	public GameObject vulnerableGem;
+
 	public GameManager gameManager;
 
 	// Use this for initialization
@@ -27,8 +29,6 @@ public class Base : MonoBehaviour {
 			{
 				if(player.pState == PlayerController.playerState.Carrying)
 				{
-					Debug.Log("CARRY");
-
 					if(player.leafInArms.GetComponent<MapleLeaf>().leafColor == player.activeColor)
 					{
 						gameManager.soundManager.PlaySound (GameManager.SoundType.leafYes);
@@ -48,11 +48,18 @@ public class Base : MonoBehaviour {
 						player.currentGemIndex++;
 
 						// Remove the leaf from the players hand when they score
+						if(vulnerableGem != null)
+						{
+							Destroy(vulnerableGem);
+						}
+						vulnerableGem = player.leafInArms;
 						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
+						player.leafInArms.transform.parent = this.transform;
+						player.leafInArms.GetComponent<MapleLeaf>().captor = player;
+						player.leafInArms.GetComponent<MapleLeaf>().carrier = null;
+						player.leafInArms = null;
 
-						//player.leafInArms.transform.parent = this.transform;
-
-						Destroy(player.leafInArms.gameObject);
+						//Destroy(player.leafInArms.gameObject);
 
 						// Change player state
 						player.pState = PlayerController.playerState.Idle;

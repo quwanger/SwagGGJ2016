@@ -6,6 +6,7 @@ public class MapleLeaf : MonoBehaviour {
 	public Color leafColor;
 	public PlayerController carrier;
 	public bool isBeingThrown = false;
+	public PlayerController captor;
 
 	// Use this for initialization
 	void Start () {

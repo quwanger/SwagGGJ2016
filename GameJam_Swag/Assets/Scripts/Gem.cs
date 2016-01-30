@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Gem : MonoBehaviour {
 
-	bool isActiveGem = false;
+	public bool isActiveGem = false;
 	float targetScale = 1.2f;
 	// Use this for initialization
 	void Start () {
@@ -36,6 +36,22 @@ public class Gem : MonoBehaviour {
 	public void DeactivateGem()
 	{
 		transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemOn");
+		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+		isActiveGem = false;
+	}
+
+	public void ReactivateGem()
+	{
+		Debug.Log ("REACTIVATE GEM");
+		transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemNext");
+		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+		isActiveGem = true;
+	}
+
+	public void StolenGem()
+	{
+		Debug.Log ("STOLEN GEM");
+		//transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemOff");
 		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
 		isActiveGem = false;
 	}

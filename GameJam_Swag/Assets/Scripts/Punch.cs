@@ -46,6 +46,19 @@ public class Punch : MonoBehaviour {
 			{
 				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
 			}
+			else if(other.gameObject.GetComponent<MapleLeaf>().captor != null)
+			{
+				PlayerController tempPlayer = other.gameObject.GetComponent<MapleLeaf>().captor;
+				tempPlayer.currentGemIndex--;
+				tempPlayer.activeColor = tempPlayer.myColors[tempPlayer.currentGemIndex];
+				tempPlayer.playerShadow.color = tempPlayer.activeColor;
+				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex+1].GetComponent<Gem>().StolenGem();
+				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex].GetComponent<Gem>().ReactivateGem();
+				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].vulnerableGem = null;
+				Debug.Log ("Who's base? " + tempPlayer.character.ToString() + " , What base? " + transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId].playerId);
+				GameObject.Find("GameManager").GetComponent<SpawnManager>().leavesOnMap.Add(other.gameObject);
+				other.gameObject.GetComponent<MapleLeaf>().captor = null;
+			}
 			other.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
 			other.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 			other.gameObject.GetComponent<Collider2D>().isTrigger = true;

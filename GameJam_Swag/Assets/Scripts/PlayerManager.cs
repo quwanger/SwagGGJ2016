@@ -53,7 +53,7 @@ public class PlayerManager : MonoBehaviour {
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Loon;
 					break;
 				case 3:
-					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
+					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Moose;
 					break;
 				default:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
