@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour {
 	public List<Color> myColors = new List<Color>();
 	public Color activeColor;
 
+	public Base myBase;
+	public int currentGemIndex;
+
 	public enum playerState
 	{
 		Idle,
@@ -72,7 +75,15 @@ public class PlayerController : MonoBehaviour {
 		myColors.Clear ();
 		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
 		for (int i=0; i<sm.sequenceCount; i++){
-			myColors.Add(sm.possibleColors[Random.Range(0, sm.colorCount)]);
+			Color tempColor = sm.possibleColors[Random.Range(0, sm.colorCount)];
+			myColors.Add(tempColor);
+			myBase.gems[i].SetActive(true);
+			myBase.gems[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = tempColor;
+			currentGemIndex = 0;
+			if(i==0)
+			{
+				myBase.gems[i].GetComponent<Gem>().ActivateGem();
+			}
 		}
 		activeColor = myColors [0];
 

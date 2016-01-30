@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	public PlayerManager playerManager;
 	public SpawnManager spawnManager;
 	public List<PlayerController> activePlayers = new List<PlayerController>();
+	public List<Base> bases = new List<Base>();
 
 	public Camera mainCamera;
 
@@ -31,5 +32,10 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void DeclareWinner(PlayerController winner)
+	{
+		Debug.Log (winner.character.ToString() + " has won!");
 	}
 }

@@ -29,13 +29,37 @@ public class Base : MonoBehaviour {
 					if(player.leafInArms.GetComponent<MapleLeaf>().leafColor == player.activeColor)
 					{
 						//score!
+						Debug.Log ("Score!");
+						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
+						transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOn");
+						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();
+						player.currentGemIndex++;
+						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
+						Destroy(player.leafInArms.gameObject);
+						player.pState = PlayerController.playerState.Idle;
+						
+						if(player.currentGemIndex >= player.gameManager.spawnManager.sequenceCount)
+						{
+							player.gameManager.DeclareWinner(player);
+						}else
+						{
+							gems[player.currentGemIndex].GetComponent<Gem>().ActivateGem();
+							player.activeColor = player.myColors[player.currentGemIndex];
+							player.gameManager.spawnManager.SpawnLeaf();
+						}
 					}
 					else
 					{
 						//don't score!
+						Debug.Log ("WRONG BASE NOOB!");
 					}
 				}
 			}
 		}
+	}
+
+	private void ScorePoint()
+	{
+
 	}
 }
