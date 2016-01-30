@@ -37,6 +37,9 @@ public class SoundManager : MonoBehaviour {
 		case GameManager.SoundType.grab:
 			this.GetComponent<AudioSource>().PlayOneShot(grabNoise);
 			break;
+		case GameManager.SoundType.leafYes:
+			this.GetComponent<AudioSource>().PlayOneShot(leafSuccess);
+			break;
 		}
 	}
 }

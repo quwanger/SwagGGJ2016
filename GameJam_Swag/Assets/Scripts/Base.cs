@@ -7,15 +7,16 @@ public class Base : MonoBehaviour {
 	public int playerId;
 	public List<GameObject> gems = new List<GameObject>();
 
+	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-	
+		gameManager = FindObjectOfType<GameManager> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	void OnTriggerEnter2D(Collider2D collider) {
@@ -26,8 +27,16 @@ public class Base : MonoBehaviour {
 			{
 				if(player.pState == PlayerController.playerState.Carrying)
 				{
+					Debug.Log("CARRY");
+
 					if(player.leafInArms.GetComponent<MapleLeaf>().leafColor == player.activeColor)
 					{
+						gameManager.soundManager.PlaySound (GameManager.SoundType.leafYes);
+						GameObject crackPart = Instantiate (Resources.Load<GameObject> ("Prefabs/crackParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
+						crackPart.GetComponent<ParticleSystem>().startColor = player.activeColor;
+						crackPart.transform.parent = this.transform;
+						Destroy (crackPart, 3);
+
 						//score!
 						Debug.Log ("Score!");
 						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
@@ -35,6 +44,9 @@ public class Base : MonoBehaviour {
 						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();
 						player.currentGemIndex++;
 						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
+
+						//player.leafInArms.transform.parent = this.transform;
+
 						Destroy(player.leafInArms.gameObject);
 						player.pState = PlayerController.playerState.Idle;
 						
