@@ -20,12 +20,12 @@ public class PlayerController : MonoBehaviour {
 		movementVector.x = Input.GetAxis("LeftJoystickX") * movementSpeed;
 		movementVector.y = Input.GetAxis("LeftJoystickY") * movementSpeed * -1;
 
-		this.gameObject.transform.localEulerAngles = new Vector3(0, 0, Mathf.Rad2Deg * (Mathf.Atan2 (movementVector.y, movementVector.x)) - 90f);
+		this.gameObject.transform.GetChild(0).gameObject.transform.localEulerAngles = new Vector3(0, 0, Mathf.Rad2Deg * (Mathf.Atan2 (movementVector.y, movementVector.x)) - 270f);
 
 		movementVector.x = Mathf.Lerp (rb.velocity.x, movementVector.x, dragConstant);
 		movementVector.y = Mathf.Lerp (rb.velocity.y, movementVector.y, dragConstant);
 
 		rb.velocity = movementVector;
-		//rb.AddForce (movementVector * movementSpeed);
+		this.gameObject.transform.localEulerAngles = new Vector3 (0f, 0f, 0f);
 	}
 }
