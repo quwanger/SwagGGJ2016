@@ -74,7 +74,7 @@ public class SpawnManager : MonoBehaviour {
 				activeColors.Add(pc.activeColor);
 			}
 
-			leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, colorCount)];
+			leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, activeColors.Count)];
 			leavesOnMap.Add(leaf);
 		}
 	}

@@ -59,7 +59,7 @@ public class PlayerManager : MonoBehaviour {
 				newPlayer.GetComponent<PlayerController>().playerManager = this;
 				playerGameObjects [i] = newPlayer;
 				playerCount++;
-				this.gameObject.GetComponent<SpawnManager>().CheckStart();
+				//this.gameObject.GetComponent<SpawnManager>().CheckStart();
 			} else if (Input.GetButtonDown (("Select" + (i+1)).ToString()) && activePlayers [i]) {
 				activePlayers [i] = false;
 				Debug.Log ("KILL PLAYER " + (i+1));

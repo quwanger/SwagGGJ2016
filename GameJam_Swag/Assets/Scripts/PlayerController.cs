@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour {
 			myColors.Add(sm.possibleColors[Random.Range(0, sm.colorCount)]);
 		}
 		activeColor = myColors [0];
+
+		FindObjectOfType<SpawnManager> ().CheckStart ();
 	}
 	
 	// Update is called once per frame
