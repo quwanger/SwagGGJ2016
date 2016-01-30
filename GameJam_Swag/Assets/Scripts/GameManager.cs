@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour {
 	public SpawnManager spawnManager;
 	public List<PlayerController> activePlayers = new List<PlayerController>();
 
+	public Camera mainCamera;
+
 	// Use this for initialization
 	void Start () {
+		mainCamera = FindObjectOfType<Camera> ();
 		playerManager = this.gameObject.GetComponent<PlayerManager>();
 		spawnManager = this.gameObject.GetComponent<SpawnManager>();
 		Initiate ();

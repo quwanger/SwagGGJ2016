@@ -5,7 +5,8 @@ public class Punch : MonoBehaviour {
 
 	public float punchStartTime;
 	private float punchDuration = 0.3f;
-	private float punchRecharge = 2.0f;
+	public float punchRecharge = 2.0f;
+	public float punchRechargeCarry = 0.3f;
 
 	// Use this for initialization
 	void Start () {
@@ -30,25 +31,40 @@ public class Punch : MonoBehaviour {
 			}
 			else if(victim.pState == PlayerController.playerState.Carrying || victim.pState == PlayerController.playerState.Throwing)
 			{
+				victim.leafInArms.transform.parent = this.transform.parent;
+				victim.leafInArms.transform.position = this.transform.position;
+				victim.leafInArms.GetComponent<MapleLeaf>().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
+				this.transform.parent.transform.parent.GetComponent<PlayerController> ().leafInArms = victim.leafInArms;
+				victim.Stun();
+				EndPunch(false);
 			}
 		}
 		else if(other.gameObject.GetComponent<MapleLeaf> ())
 		{
 			//pick up maple leaf
+			if(other.gameObject.GetComponent<MapleLeaf>().carrier != null)
+			{
+				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
+			}
 			other.gameObject.GetComponent<Collider2D>().isTrigger = true;
 			other.gameObject.transform.parent = this.transform.parent;
+			other.gameObject.transform.position = this.transform.position;
+			other.gameObject.GetComponent<MapleLeaf>().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().leafInArms = other.gameObject;
 			EndPunch(false);
 		}
 	}
 
-	void EndPunch(bool toIdle)
+	private void EndPunch(bool toIdle)
 	{
 		if (toIdle) {
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Idle;
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRecharge);
 		} else {
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Carrying;
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRechargeCarry);
 		}
-		this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRecharge);
+
 		this.gameObject.SetActive(false);
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class MapleLeaf : MonoBehaviour {
 
 	public Color leafColor;
+	public PlayerController carrier;
 
 	// Use this for initialization
 	void Start () {

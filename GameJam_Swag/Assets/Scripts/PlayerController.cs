@@ -8,13 +8,14 @@ public class PlayerController : MonoBehaviour {
 	private Vector2 movementVector;
 
 	public PlayerManager playerManager;
-	public GameManager gameManager;
-
+    public Camera mainCamera;
 	private int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
 
 	public float stunStartTime;
 	public float punchResetTime = 0f;
+
+	public GameObject leafInArms = null;
 
 	public List<Color> myColors = new List<Color>();
 	public Color activeColor;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour {
 				 
 		this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + character.ToString() + "_Body");
 		this.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + character.ToString() + "_Head");
+
+		mainCamera = FindObjectOfType<Camera> ();
 
 		StartRound ();
 	}
@@ -95,33 +98,41 @@ public class PlayerController : MonoBehaviour {
 //----- HANDLES PLAYER ACTION
 		if(Input.GetAxis (("RightTrigger" + playerId).ToString()) > 0f)
 		{
-			switch(pState)
+			if(Time.time > punchResetTime)
 			{
-			case playerState.Idle:
-				//punch
-				if(Time.time > punchResetTime)
+				switch(pState)
 				{
+				case playerState.Idle:
+					//punch
 					Punch();
+					break;
+				case playerState.Carrying:
+					// drop/throw leaf
+					leafInArms.transform.parent = transform.parent;
+					leafInArms.GetComponent<Collider2D>().isTrigger = false;
+					leafInArms.GetComponent<MapleLeaf>().carrier = null;
+					leafInArms = null;
+					pState = playerState.Idle;
+					punchResetTime = (Time.time + this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchRecharge);
+					break;
+				case playerState.Punching:
+					//nothing
+					break;
+				case playerState.Stunned:
+					//nothing
+					break;
+				case playerState.Throwing:
+					//nothing
+					break;
 				}
-				break;
-			case playerState.Carrying:
-				// drop/throw leaf
-				break;
-			case playerState.Punching:
-				//nothing
-				break;
-			case playerState.Stunned:
-				//nothing
-				break;
-			case playerState.Throwing:
-				//nothing
-				break;
 			}
 		}
 	}
 
 	private void Punch()
 	{
+		//mainCamera.GetComponent<CameraShake> ().Shake ();
+		//mainCamera.GetComponent<CameraZoom> ().ZoomIn (this.gameObject);
 		pState = playerState.Punching;
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.SetActive (true);
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchStartTime = Time.time;
@@ -133,5 +144,6 @@ public class PlayerController : MonoBehaviour {
 		Debug.Log ("Stunned!");
 		pState = playerState.Stunned;
 		stunStartTime = Time.time;
+		leafInArms = null;
 	}
 }
