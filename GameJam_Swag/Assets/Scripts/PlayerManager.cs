@@ -26,8 +26,7 @@ public class PlayerManager : MonoBehaviour {
 		}
 	}
 
-	public void Initiate()
-	{
+	public void Initiate() {
 
 	}
 	
@@ -50,7 +49,7 @@ public class PlayerManager : MonoBehaviour {
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Loon;
 					break;
 				case 3:
-					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Moose;
+					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
 					break;
 				default:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;

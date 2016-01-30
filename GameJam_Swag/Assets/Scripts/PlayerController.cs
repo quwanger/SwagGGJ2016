@@ -86,8 +86,6 @@ public class PlayerController : MonoBehaviour {
 			vibrationIntensity = 0;
 		}
 
-		Debug.Log (vibrationIntensity);
-
 //----- HANDLES PLAYER MOVEMENT
 		if (pState == playerState.Idle) {
 			GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
@@ -134,6 +132,8 @@ public class PlayerController : MonoBehaviour {
 					Punch();
 					break;
 				case playerState.Carrying:
+					gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
+
 					// drop/throw leaf
 					leafInArms.transform.parent = transform.parent;
 					leafInArms.GetComponent<Collider2D>().isTrigger = false;
@@ -158,21 +158,41 @@ public class PlayerController : MonoBehaviour {
 
 	private void Punch()
 	{
+		Debug.Log ("Punch!");
+
+		// Set state to punching
+		pState = playerState.Punching;
+
 		// Set vibration intensity to a 
 		vibrationIntensity = 200.0f;
 
-		//mainCamera.GetComponent<CameraShake> ().Shake ();
-		//mainCamera.GetComponent<CameraZoom> ().ZoomIn (this.gameObject);
-		pState = playerState.Punching;
+		// Play correct sound for correct player
+		switch (playerId) {
+		case 1:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
+			break;
+		case 2:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			break;
+		case 3:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			break;
+		case 4:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
+			break;
+		}
+
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.SetActive (true);
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchStartTime = Time.time;
-		Debug.Log ("Punch!");
 	}
 
 	public void Stun()
 	{
 		Debug.Log ("Stunned!");
+
+		// Set state to punching
 		pState = playerState.Stunned;
+
 		stunStartTime = Time.time;
 		leafInArms = null;
 	}
