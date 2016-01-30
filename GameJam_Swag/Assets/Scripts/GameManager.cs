@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public SpawnManager spawnManager;
 	public SoundManager soundManager;
 	public List<PlayerController> activePlayers = new List<PlayerController>();
+	public List<Base> bases = new List<Base>();
 	public Camera mainCamera;
 
 	// For sound
@@ -51,5 +52,15 @@ public class GameManager : MonoBehaviour {
 		foreach (PlayerController activePlayer in activePlayers) {
 			activePlayer.StartRound();
 		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+	
+	}
+
+	public void DeclareWinner(PlayerController winner)
+	{
+		Debug.Log (winner.character.ToString() + " has won!");
 	}
 }

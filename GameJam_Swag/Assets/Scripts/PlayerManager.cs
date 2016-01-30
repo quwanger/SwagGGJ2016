@@ -38,6 +38,8 @@ public class PlayerManager : MonoBehaviour {
 				Debug.Log ("START PLAYER " + (i+1));
 				GameObject newPlayer = Instantiate (playerObject, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
 				newPlayer.GetComponent<PlayerController> ().PlayerId = (i+1);
+				newPlayer.GetComponent<PlayerController> ().myBase = this.gameObject.GetComponent<GameManager>().bases[i];
+				newPlayer.transform.position = newPlayer.GetComponent<PlayerController> ().myBase.transform.position;
 				switch(i){
 				case 0:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;

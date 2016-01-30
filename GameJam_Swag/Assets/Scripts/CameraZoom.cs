@@ -8,7 +8,7 @@ public class CameraZoom : MonoBehaviour {
 	private bool zoomIn = false;
 	public GameObject character;
 	public Vector3 originalCameraPosition;
-	private float targetSize = 2.5f;
+	private float targetSize = 3f;
 
 	void Start () {
 		defaultSize = Camera.main.orthographicSize;
@@ -19,10 +19,10 @@ public class CameraZoom : MonoBehaviour {
 	void Update () {
 		if (followTarget) {
 			this.gameObject.transform.position = new Vector3(character.transform.position.x, character.transform.position.y, originalCameraPosition.z);
-			Time.timeScale = 0.5f;
+			Time.timeScale = 0.25f;
 
 			if(Camera.main.orthographicSize > (targetSize+0.2f)){
-				Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.deltaTime*5f);
+				Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.deltaTime*10f);
 			}
 			else
 			{

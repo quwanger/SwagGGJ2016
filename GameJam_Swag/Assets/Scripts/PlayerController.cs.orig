@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using XInputDotNetPure; // Required in C#
 
 public class PlayerController : MonoBehaviour {
-
-	private const float zoomConstant = 2.5f;
 
 	private Rigidbody2D rb;
 	private Vector2 movementVector;
 
 	public PlayerManager playerManager;
+<<<<<<< HEAD
 	public GameManager gameManager;
+=======
+	public Camera mainCamera;
+>>>>>>> playerStates
 
-    public Camera mainCamera;
 	private int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
 
@@ -24,9 +24,6 @@ public class PlayerController : MonoBehaviour {
 
 	public List<Color> myColors = new List<Color>();
 	public Color activeColor;
-
-	public Base myBase;
-	public int currentGemIndex;
 
 	public enum playerState
 	{
@@ -51,9 +48,6 @@ public class PlayerController : MonoBehaviour {
 	public float movementSpeed = 4f;
 	public float dragConstant = 0.09f;
 
-	//For vibration
-	public float vibrationIntensity = 0.0f;
-
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
@@ -75,15 +69,7 @@ public class PlayerController : MonoBehaviour {
 		myColors.Clear ();
 		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
 		for (int i=0; i<sm.sequenceCount; i++){
-			Color tempColor = sm.possibleColors[Random.Range(0, sm.colorCount)];
-			myColors.Add(tempColor);
-			myBase.gems[i].SetActive(true);
-			myBase.gems[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = tempColor;
-			currentGemIndex = 0;
-			if(i==0)
-			{
-				myBase.gems[i].GetComponent<Gem>().ActivateGem();
-			}
+			myColors.Add(sm.possibleColors[Random.Range(0, sm.colorCount)]);
 		}
 		activeColor = myColors [0];
 
@@ -92,18 +78,8 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Set vibration intensity to decrease by half until it reaches 0
-		if (vibrationIntensity > 1){
-			vibrationIntensity /= 2;
-		} else if(vibrationIntensity < 1){
-			vibrationIntensity = 0;
-		}
 
 //----- HANDLES PLAYER MOVEMENT
-		if (pState == playerState.Idle) {
-			GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
-		}
-
 		if (pState != playerState.Stunned) {
 			movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * movementSpeed;
 			movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * movementSpeed * -1;
@@ -118,24 +94,15 @@ public class PlayerController : MonoBehaviour {
 			rb.velocity = movementVector;
 			this.gameObject.transform.localEulerAngles = new Vector3 (0f, 0f, 0f);
 		} else {
-			vibrationIntensity = 100.0f;
-
-			GamePad.SetVibration(WindowsCheckControllerToVibrate(), vibrationIntensity, vibrationIntensity);
-
 			if(Time.time > (stunStartTime + playerManager.stunDuration))
 			{
 				pState = playerState.Idle;
-
-				GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
 			}
 		}
 
 //----- HANDLES PLAYER ACTION
 		if(Input.GetAxis (("RightTrigger" + playerId).ToString()) > 0f)
 		{
-			// Actual vibration
-			GamePad.SetVibration(WindowsCheckControllerToVibrate(), vibrationIntensity, vibrationIntensity);
-
 			if(Time.time > punchResetTime)
 			{
 				switch(pState)
@@ -145,8 +112,6 @@ public class PlayerController : MonoBehaviour {
 					Punch();
 					break;
 				case playerState.Carrying:
-					gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
-
 					// drop/throw leaf
 					leafInArms.transform.parent = transform.parent;
 					leafInArms.GetComponent<Collider2D>().isTrigger = false;
@@ -171,84 +136,19 @@ public class PlayerController : MonoBehaviour {
 
 	private void Punch()
 	{
-		Debug.Log ("Punch!");
-
-		// Set state to punching
+		//mainCamera.GetComponent<CameraShake> ().Shake ();
+		//mainCamera.GetComponent<CameraZoom> ().ZoomIn (this.gameObject);
 		pState = playerState.Punching;
-
-		bool zoom = false;
-
-		foreach (PlayerController player in gameManager.activePlayers) {
-			if(player != this)
-			{
-				if(Vector3.Distance(this.gameObject.transform.position, player.gameObject.transform.position) < zoomConstant)
-				{
-					if(player.pState == playerState.Carrying || player.pState == playerState.Throwing)
-					{
-						Camera.main.GetComponent<CameraZoom>().ZoomIn(this.gameObject);
-						zoom = true;
-						break;
-					}
-				}
-			}
-		}
-
-		if (!zoom) {
-			Camera.main.GetComponent<CameraShake>().Shake();
-		}
-
-		// Set vibration intensity to a 
-		vibrationIntensity = 200.0f;
-
-		// Play correct sound for correct player
-		switch (playerId) {
-		case 1:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
-			break;
-		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
-			break;
-		case 3:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
-			break;
-		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
-			break;
-		}
-
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.SetActive (true);
 		this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchStartTime = Time.time;
+		Debug.Log ("Punch!");
 	}
 
 	public void Stun()
 	{
 		Debug.Log ("Stunned!");
-
-		// Set state to punching
 		pState = playerState.Stunned;
-
 		stunStartTime = Time.time;
 		leafInArms = null;
-	}
-
-	// To switch between our player indexes to assign vibration
-	public XInputDotNetPure.PlayerIndex WindowsCheckControllerToVibrate() {
-		switch (playerId) {
-			case(1):
-				return PlayerIndex.One;
-				break;
-			case(2):
-				return PlayerIndex.Two;
-				break;
-			case(3):
-				return PlayerIndex.Three;
-				break;
-			case(4):
-				return PlayerIndex.Four;
-				break;
-			default:
-				return PlayerIndex.One;
-				break;
-		}
 	}
 }

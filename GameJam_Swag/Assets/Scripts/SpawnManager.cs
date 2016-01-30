@@ -48,7 +48,7 @@ public class SpawnManager : MonoBehaviour {
 
 	public void CheckStart()
 	{
-		if (this.gameObject.GetComponent<PlayerManager> ().playerCount > 1) {
+		if (this.gameObject.GetComponent<PlayerManager> ().playerCount >= 1) {
 			StartGame ();
 		}
 	}
@@ -66,22 +66,22 @@ public class SpawnManager : MonoBehaviour {
 
 		// Create player count + 1 leaves and spawn them on the map with a color
 		for (int i=0; i<this.gameObject.GetComponent<PlayerManager>().playerCount+1; i++){
-			GameObject leaf = SpawnLeaf();
-
-			List<Color> activeColors = new List<Color>();
-
-			foreach (PlayerController pc in gameManager.activePlayers) {
-				activeColors.Add(pc.activeColor);
-			}
-
-			leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, activeColors.Count)];
-			leavesOnMap.Add(leaf);
+			SpawnLeaf();
 		}
 	}
 
-	private GameObject SpawnLeaf()
+	public void SpawnLeaf()
 	{
+		List<Color> activeColors = new List<Color>();
+
+		foreach (PlayerController pc in gameManager.activePlayers) {
+			activeColors.Add(pc.activeColor);
+		}
+		
 		Vector3 position = new Vector3 (Random.Range (-4F, 4F), Random.Range (-4F, 4F), 0);
-		return Instantiate (mapleLeaf, position, Quaternion.identity) as GameObject;
+		GameObject leaf = Instantiate (mapleLeaf, position, Quaternion.identity) as GameObject;
+
+		leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, activeColors.Count)];
+		leavesOnMap.Add(leaf);
 	}
 }
