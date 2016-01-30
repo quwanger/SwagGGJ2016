@@ -65,13 +65,13 @@ public class PlayerController : MonoBehaviour {
 
 		mainCamera = FindObjectOfType<Camera> ();
 
+		gameManager.activePlayers.Add (this);
+
 		StartRound ();
 	}
 
 	public void StartRound()
 	{
-		gameManager.activePlayers.Add (this);
-
 		myColors.Clear ();
 		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
 		for (int i=0; i<sm.sequenceCount; i++){

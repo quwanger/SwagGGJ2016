@@ -39,4 +39,11 @@ public class Gem : MonoBehaviour {
 		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
 		isActiveGem = false;
 	}
+
+	public void ResetGem()
+	{
+		transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
+		transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemNext");
+		isActiveGem = false;
+	}
 }

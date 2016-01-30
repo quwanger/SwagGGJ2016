@@ -63,4 +63,28 @@ public class GameManager : MonoBehaviour {
 	{
 		Debug.Log (winner.character.ToString() + " has won!");
 	}
+
+	public void ResetRound() {
+		foreach(Base playerBase in bases) {
+			playerBase.resetBase();
+		}
+
+		// Remove all maple leafs
+		foreach (GameObject leaf in spawnManager.leavesOnMap) {
+			Destroy(leaf);
+		}
+
+		spawnManager.leavesOnMap = new List<GameObject> ();
+
+		// Respawn players at home
+		foreach (PlayerController pc in activePlayers) {
+			pc.transform.position = pc.GetComponent<PlayerController> ().myBase.transform.position;
+		}
+
+
+		
+		//spawnManager.gameHasStarted = false;
+
+		Initiate();
+	}
 }

@@ -68,6 +68,7 @@ public class PlayerManager : MonoBehaviour {
 				foreach (PlayerController pc in gameManager.activePlayers) {
 					// If the type of the deleted character is in the list of active characters, remove it from active characters
 					if(pc.character == playerGameObjects [i].GetComponent<PlayerController>().character) {
+						pc.myBase.resetBase();
 						gameManager.activePlayers.Remove(pc);
 						break;
 					}
