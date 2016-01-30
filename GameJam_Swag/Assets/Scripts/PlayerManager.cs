@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviour {
 
 	public float stunDuration = 2.0f;
 
+	public int playerCount = 0;
+
 	public enum PlayerCharacter{
 		Loon,
 		Beaver,
@@ -22,6 +24,11 @@ public class PlayerManager : MonoBehaviour {
 		{
 			activePlayers[i] = false;
 		}
+	}
+
+	public void Initiate()
+	{
+
 	}
 	
 	// Update is called once per frame
@@ -51,10 +58,13 @@ public class PlayerManager : MonoBehaviour {
 				}
 				newPlayer.GetComponent<PlayerController>().playerManager = this;
 				playerGameObjects [i] = newPlayer;
+				playerCount++;
+				this.gameObject.GetComponent<SpawnManager>().CheckStart();
 			} else if (Input.GetButtonDown (("Select" + (i+1)).ToString()) && activePlayers [i]) {
 				activePlayers [i] = false;
 				Debug.Log ("KILL PLAYER " + (i+1));
 				Destroy (playerGameObjects [i]);
+				playerCount--;
 			}
 		}
 	}

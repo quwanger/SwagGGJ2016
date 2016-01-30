@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
@@ -13,6 +14,8 @@ public class PlayerController : MonoBehaviour {
 
 	public float stunStartTime;
 	public float punchResetTime = 0f;
+
+	public List<Color> myColors = new List<Color>();
 
 	public enum playerState
 	{
@@ -43,6 +46,17 @@ public class PlayerController : MonoBehaviour {
 				 
 		this.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + character.ToString() + "_Body");
 		this.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + character.ToString() + "_Head");
+
+		StartRound ();
+	}
+
+	public void StartRound()
+	{
+		myColors.Clear ();
+		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
+		for (int i=0; i<sm.sequenceCount; i++){
+			myColors.Add(sm.possibleColors[Random.Range(0, sm.colorCount)]);
+		}
 	}
 	
 	// Update is called once per frame

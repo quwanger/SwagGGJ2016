@@ -32,11 +32,13 @@ public class Punch : MonoBehaviour {
 			{
 			}
 		}
-		//else if(other.gameObject.GetComponent<MapleLeaf> ())
-		//{
+		else if(other.gameObject.GetComponent<MapleLeaf> ())
+		{
 			//pick up maple leaf
-			//change state to carrying
-		//}
+			other.gameObject.GetComponent<Collider2D>().isTrigger = true;
+			other.gameObject.transform.parent = this.transform.parent;
+			EndPunch(false);
+		}
 	}
 
 	void EndPunch(bool toIdle)
@@ -44,7 +46,7 @@ public class Punch : MonoBehaviour {
 		if (toIdle) {
 			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Idle;
 		} else {
-
+			this.transform.parent.transform.parent.GetComponent<PlayerController> ().pState = PlayerController.playerState.Carrying;
 		}
 		this.transform.parent.transform.parent.GetComponent<PlayerController> ().punchResetTime = (Time.time + punchRecharge);
 		this.gameObject.SetActive(false);

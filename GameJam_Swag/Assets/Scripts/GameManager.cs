@@ -3,16 +3,24 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	public BoardManager boardScript;
+	public PlayerManager playerManager;
+	public SpawnManager spawnManager;
 
 	// Use this for initialization
-	void Awake () {
-		boardScript = GetComponent<BoardManager> ();
-		InitGame ();
+	void Start () {
+		playerManager = this.gameObject.GetComponent<PlayerManager>();
+		spawnManager = this.gameObject.GetComponent<SpawnManager>();
+		Initiate ();
 	}
 
-	void InitGame() {
-		boardScript.SetupScene();
+	public void Initiate()
+	{
+		spawnManager.Initiate ();
+
+		PlayerController[] activePlayers = FindObjectsOfType(typeof(PlayerController)) as PlayerController[];
+		foreach (PlayerController activePlayer in activePlayers) {
+			activePlayer.StartRound();
+		}
 	}
 	
 	// Update is called once per frame
