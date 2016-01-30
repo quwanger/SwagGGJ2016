@@ -6,11 +6,11 @@ public class Base : MonoBehaviour {
 
 	public int playerId;
 	public List<GameObject> gems = new List<GameObject>();
-
+	private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-	
+		gameManager = FindObjectOfType<GameManager> ();
 	}
 	
 	// Update is called once per frame
@@ -30,21 +30,40 @@ public class Base : MonoBehaviour {
 					{
 						//score!
 						Debug.Log ("Score!");
+						// Set the big leaf to the active color
 						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
 						transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOn");
+
+						// Disable effect in the gem history
 						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();
 						player.currentGemIndex++;
+
+						// Remove the leaf from the players hand when they score
 						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
 						Destroy(player.leafInArms.gameObject);
+
+						// Change player state
 						player.pState = PlayerController.playerState.Idle;
-						
-						if(player.currentGemIndex >= player.gameManager.spawnManager.sequenceCount)
+
+						// If player won
+						if(player.currentGemIndex >= player.gameManager.spawnManager.sequenceCount) 
 						{
 							player.gameManager.DeclareWinner(player);
-						}else
+
+							// Restart game
+							gameManager.ResetRound();
+						} 
+
+						// If player didn't win
+						else 
 						{
+							// Active next gem
 							gems[player.currentGemIndex].GetComponent<Gem>().ActivateGem();
+
+							// Update the players active color (which color is needed next)
 							player.activeColor = player.myColors[player.currentGemIndex];
+
+							// Spawn a new leaf
 							player.gameManager.spawnManager.SpawnLeaf();
 						}
 					}
@@ -61,5 +80,16 @@ public class Base : MonoBehaviour {
 	private void ScorePoint()
 	{
 
+	}
+
+	public void resetBase() {
+		// Reset gems to default 
+		transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOff");
+		transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(255,255,255);
+		// To be safe, lets deactivate all gems
+		for(int i = 0; i < gems.Count; i++) {
+			gems[i].GetComponent<Gem> ().ResetGem ();
+			gems[i].SetActive(false);
+		}
 	}
 }
