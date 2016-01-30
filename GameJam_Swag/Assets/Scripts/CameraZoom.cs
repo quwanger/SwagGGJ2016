@@ -4,73 +4,79 @@ using System.Collections;
 public class CameraZoom : MonoBehaviour {
 
 	private float defaultSize;
-	private float defaultPosition;
-
+	private bool followTarget = false;
+	private bool zoomIn = false;
 	public GameObject character;
+	public Vector3 originalCameraPosition;
+	private float targetSize = 2.5f;
 
 	void Start () {
 		defaultSize = Camera.main.orthographicSize;
-		defaultPosition = this.transform.position.x;
+		originalCameraPosition = Camera.main.transform.position;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown ("space")) {
-			ZoomIn ();
+		if (followTarget) {
+			this.gameObject.transform.position = new Vector3(character.transform.position.x, character.transform.position.y, originalCameraPosition.z);
+			Time.timeScale = 0.5f;
+
+			if(Camera.main.orthographicSize > (targetSize+0.2f)){
+				Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.deltaTime*5f);
+			}
+			else
+			{
+				Camera.main.orthographicSize = defaultSize;
+				followTarget = false;
+				this.gameObject.transform.position = originalCameraPosition;
+				Time.timeScale = 1.0f;
+			}
 		}
 	}
 
-	void ZoomIn () {
-		iTween.ValueTo (this.gameObject, iTween.Hash ("from", defaultSize,
+	public void ZoomIn (GameObject target) {
+
+		followTarget = true;
+		zoomIn = true;
+		character = target;
+		this.gameObject.transform.position = new Vector3(character.transform.position.x, character.transform.position.y, originalCameraPosition.z);
+		/*iTween.ValueTo (this.gameObject, iTween.Hash ("from", defaultSize,
 		                                                     "to", 2f,
-		                                                     "time", 0.5f,
-		                                                     "easetype", iTween.EaseType.easeInExpo,
+		                                                     "time", 0.2f,
+		                                                     "easetype", iTween.EaseType.linear,
 		                                                     "onupdate", "UpdateOrthographicCameraSize",
 		                                                     "onupdatetarget", this.gameObject,
-															 "oncomplete", "ZoomOut"));
+															 "oncomplete", "ZoomOut"));*/
 
-		iTween.ValueTo (this.gameObject, iTween.Hash ("from", defaultPosition,
-		                                                     "to", character.transform.position.x,
-		                                                     "time", 0.5f,
-		                                                     "easetype", iTween.EaseType.easeInExpo,
-		                                                     "onupdate", "UpdateCameraPosition",
-		                                                     "onupdatetarget", this.gameObject,
-		                                                     "oncomplete", "moveToOrigin"));
+
 	}
 	
 	void UpdateOrthographicCameraSize (float size) {
 		Camera.main.orthographicSize = size; 
 	}
 
-	void UpdateCameraPosition (float position) {
-		Debug.Log (position);
-		this.transform.position = new Vector3(position, this.transform.position.y, this.transform.position.z);
-	}
-
 	void moveToOrigin () {
-		StartCoroutine(Wait(1));
+		StartCoroutine(Wait(0.5f));
 	}
 
 	void ZoomOut () {
-		StartCoroutine(Wait(1));
+		StartCoroutine(Wait(0.5f));
 	}
 
-	IEnumerator Wait(int timeInSeconds) {
+	IEnumerator Wait(float timeInSeconds) {
 		yield return new WaitForSeconds(timeInSeconds);
+
+		this.transform.position = originalCameraPosition;
 
 		iTween.ValueTo (this.gameObject, iTween.Hash ("from", Camera.main.orthographicSize,
 		                                              "to", defaultSize,
-		                                              "time", 0.7f,
+		                                              "time", 0.4f,
 		                                              "easetype", iTween.EaseType.easeOutExpo,
 		                                              "onupdate", "UpdateOrthographicCameraSize",                                           
 		                                              "onupdatetarget", this.gameObject));
 
-		iTween.ValueTo (this.gameObject, iTween.Hash ("from", this.transform.position.x,
-		                                              "to", defaultPosition,
-		                                              "time", 0.7f,
-		                                              "easetype", iTween.EaseType.easeOutExpo,
-		                                              "onupdate", "UpdateCameraPosition",
-		                                              "onupdatetarget", this.gameObject));
+		followTarget = false;
+		character = null;
 	}
 	
 }
