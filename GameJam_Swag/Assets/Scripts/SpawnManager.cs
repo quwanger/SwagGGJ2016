@@ -93,7 +93,6 @@ public class SpawnManager : MonoBehaviour {
 		// Get a random position from the list of possible spawn points
 		GameObject spawnPoint = validSpawnPoints [Random.Range (0, validSpawnPoints.Count)];
 		Vector3 position = spawnPoint.transform.position;
-		spawnPoint.GetComponent<SpawnPointController>().isOccupied = true;
 
 		GameObject leaf = Instantiate (mapleLeaf, position, Quaternion.identity) as GameObject;
 
