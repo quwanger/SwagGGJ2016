@@ -101,10 +101,11 @@ public class SpawnManager : MonoBehaviour {
 
 		if (!gameHasStarted && !countdownStart) {
 			gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
 		}
 
 		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
-		gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
+
 		countdownStart = true;
 		countdownStartTime = Time.time;
 	}
