@@ -50,7 +50,8 @@ public class GameManager : MonoBehaviour {
 		powerRelease,
 		leafNo,
 		leafYes,
-		intro
+		intro,
+		countDown,
 	};
 
 	// Use this for initialization
@@ -216,5 +217,16 @@ public class GameManager : MonoBehaviour {
 		spawnManager.StartCountdown ();
 
 		Initiate();
+	}
+
+	public GameObject GetPlayerById(int id)
+	{
+		foreach (PlayerController player in activePlayers) {
+			if(player.PlayerId == id) {
+				return player.gameObject;
+			}
+		}
+
+		return null;
 	}
 }

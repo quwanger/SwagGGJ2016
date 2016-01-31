@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	public GameManager gameManager;
 
     public Camera mainCamera;
-	private int playerId = 1;
+	public int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
 
 	public SpriteRenderer playerShadow;
@@ -305,6 +305,21 @@ public class PlayerController : MonoBehaviour {
 
 		// Set state to punching
 		pState = playerState.Stunned;
+
+		switch (playerId) {
+		case 1:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
+			break;
+		case 2:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			break;
+		case 3:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
+			break;
+		case 4:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			break;
+		}
 
 		stunStartTime = Time.time;
 		leafInArms = null;

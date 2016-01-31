@@ -39,7 +39,7 @@ public class SpawnManager : MonoBehaviour {
 	void Update () {
 		if (!gameHasStarted) {
 			if (countdownStart) {
-				Debug.Log((countdownStartTime + countdownDuration) - Time.time);
+				//Debug.Log((countdownStartTime + countdownDuration) - Time.time);
 
 				if ((countdownStartTime + countdownDuration) - Time.time > 2.0f) {
 					Destroy (gameCountdown03);
@@ -98,9 +98,13 @@ public class SpawnManager : MonoBehaviour {
 	public void StartCountdown()
 	{
 		Destroy (gameStartMessage);
+
 		if (!gameHasStarted && !countdownStart) {
 			gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
 		}
+
+		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+		gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
 		countdownStart = true;
 		countdownStartTime = Time.time;
 	}
