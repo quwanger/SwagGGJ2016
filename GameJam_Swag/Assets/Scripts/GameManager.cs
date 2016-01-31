@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 
 	public const int totalColors = 7;
 	public const int minColors = 2;
-	public const int maxSequence = 7;
+	public const int maxSequence = 8;
 	public const int minSequence = 3;
 
 	private float godModeDuration = 10.0f;
@@ -132,10 +132,10 @@ public class GameManager : MonoBehaviour {
 		Debug.Log (winner.character.ToString() + " has won!");
 
 		gameEndTitle = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, 1.5f, -18f), Quaternion.identity) as GameObject;
-		gameEndTitle.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_yearofthe") as Sprite;
+		gameEndTitle.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_yearofthe" + Random.Range(1,3).ToString()) as Sprite;
 
 		gameEndMessage = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, -1.5f, -18f), Quaternion.identity) as GameObject;
-		gameEndMessage.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_" + currentGod.character.ToString ()) as Sprite;
+		gameEndMessage.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_" + currentGod.character.ToString () + Random.Range(1,3).ToString()) as Sprite;
 
 		godModeStartTime = Time.time;
 		inGodMode = true;
@@ -148,13 +148,13 @@ public class GameManager : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
 			break;
 		}
 

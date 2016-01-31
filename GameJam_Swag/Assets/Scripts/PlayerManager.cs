@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour {
 
 	private GameManager gameManager;
 
-	public float stunDuration = 2.0f;
+	public float stunDuration = 1.0f;
 	
 	public enum PlayerCharacter{
 		Loon,

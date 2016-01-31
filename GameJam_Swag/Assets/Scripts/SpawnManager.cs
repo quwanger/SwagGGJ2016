@@ -67,6 +67,7 @@ public class SpawnManager : MonoBehaviour {
 					Destroy (starPart, 3);
 
 					GameObject go = Instantiate (Resources.Load<GameObject> ("Prefabs/Go"), new Vector3(0, 0, -18f),Quaternion.identity) as GameObject;
+					go.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite> ("Sprites/text_go" + Random.Range(1,3).ToString()) as Sprite;
 					Destroy (go, 0.75f);
 
 					gameManager.soundManager.PlaySound (GameManager.SoundType.intro);
@@ -129,7 +130,7 @@ public class SpawnManager : MonoBehaviour {
 
 		// Create leaves and spawn them on the map with a color
 
-		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
+		for (int i = 0; i < gameManager.activePlayers.Count + 2; i++){
 			SpawnLeaf();
 		}
 	}

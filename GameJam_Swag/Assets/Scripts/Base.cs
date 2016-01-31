@@ -11,6 +11,9 @@ public class Base : MonoBehaviour {
 	public SpawnManager spawnManager;
 	public GameManager gameManager;
 
+	private GameObject gettingCloseTitle;
+	private GameObject gettingCloseCharacter;
+
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
@@ -44,7 +47,18 @@ public class Base : MonoBehaviour {
 						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
 						transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOn");
 
+						//check is this player only needs 1 more to win
+						if(player.currentGemIndex == (gameManager.sequenceCount-2))
+						{
+							gettingCloseTitle = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, 1.5f, -18f), Quaternion.identity) as GameObject;
+							gettingCloseTitle.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_stopthe" + Random.Range(1,3).ToString()) as Sprite;
 
+							gettingCloseCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, -1.5f, -18f), Quaternion.identity) as GameObject;
+							gettingCloseCharacter.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_" + player.character.ToString () + Random.Range(1,3).ToString()) as Sprite;
+
+							Destroy(gettingCloseTitle, 0.5f);
+							Destroy(gettingCloseCharacter, 0.5f);
+						}
 
 						// Disable effect in the gem history
 						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();

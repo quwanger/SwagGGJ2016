@@ -5,7 +5,7 @@ using XInputDotNetPure; // Required in C#
 
 public class PlayerController : MonoBehaviour {
 
-	private const float zoomConstant = 2.5f;
+	private const float zoomConstant = 1.5f;
 
 	private Rigidbody2D rb;
 	private Vector2 movementVector;
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (gameManager.spawnManager.gameHasStarted) {
 			StartRound ();
-			if(gameManager.spawnManager.leavesOnMap.Count < (gameManager.activePlayers.Count + 1))
+			if(gameManager.spawnManager.leavesOnMap.Count < (gameManager.activePlayers.Count + 2))
 			{
 				gameManager.spawnManager.SpawnLeaf();
 			}
@@ -203,7 +203,7 @@ public class PlayerController : MonoBehaviour {
 				}
 			}
 
-			if(leafInArms == null && pState == playerState.Throwing)
+			if(leafInArms == null && (pState == playerState.Throwing || pState == playerState.Carrying))
 			{
 				pState = playerState.Idle;
 				MapleLeaf brokenLeaf = GetComponentInChildren<MapleLeaf>();
