@@ -277,10 +277,10 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		case 3:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		}
 

@@ -19,6 +19,9 @@ public class SpawnManager : MonoBehaviour {
 	private bool countdownStart = false;
 
 	private GameObject gameStartMessage = null;
+	private GameObject gameCountdown01 = null;
+	private GameObject gameCountdown02 = null;
+	private GameObject gameCountdown03 = null;
 
 	// Use this for initialization
 	void Start () {
@@ -36,9 +39,28 @@ public class SpawnManager : MonoBehaviour {
 	void Update () {
 		if (!gameHasStarted) {
 			if (countdownStart) {
+				Debug.Log((countdownStartTime + countdownDuration) - Time.time);
+
+				if ((countdownStartTime + countdownDuration) - Time.time > 2.0f) {
+					Destroy (gameCountdown03);
+					gameCountdown03 = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/Countdown03"));
+				} else if ((countdownStartTime + countdownDuration) - Time.time > 1.0f) {
+					Destroy (gameCountdown03);
+					Destroy (gameCountdown02);
+					gameCountdown03 = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/Countdown02"));
+				} else if ((countdownStartTime + countdownDuration) - Time.time > 0.0f) {
+					Destroy (gameCountdown03);
+					Destroy (gameCountdown02);
+					Destroy (gameCountdown01);
+					gameCountdown03 = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/Countdown01"));
+				}
+
 				if (Time.time > (countdownStartTime + countdownDuration)) {
 					countdownStart = false;
 					Destroy(gameStartMessage);
+					Destroy (gameCountdown03);
+					Destroy (gameCountdown02);
+					Destroy (gameCountdown01);
 					StartGame ();
 				}
 			}
