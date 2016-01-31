@@ -67,22 +67,38 @@ public class SpawnManager : MonoBehaviour {
 		// Prevent a spawn on same point
 		if (leavesOnMap.Count > 0) {
 			foreach (GameObject tempSpawnPoint in leafSpawnPoints) {
+				// go through 
+				bool validSpawnPoint = true;
 				foreach (GameObject tempLeaf in leavesOnMap) {
-					if (tempLeaf.transform.position != tempSpawnPoint.transform.position) {
-						validSpawnPoints.Add (tempSpawnPoint);
+					if(Vector3.Distance(tempLeaf.transform.position, tempSpawnPoint.transform.position) < 1.0f)
+					{
+						validSpawnPoint = false;
+						break;
 					}
+				}
+
+				if(validSpawnPoint) {
+					validSpawnPoints.Add (tempSpawnPoint);
 				}
 			}
 		} else {
 			validSpawnPoints = leafSpawnPoints;
 		}
 
+		if(validSpawnPoints.Count < 1) {
+			Debug.Log("All Spawn points are currently crowded");
+			return;
+		}
+
 		// Get a random position from the list of possible spawn points
-		Vector3 position = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)].transform.position;
+		GameObject spawnPoint = validSpawnPoints [Random.Range (0, validSpawnPoints.Count)];
+		Vector3 position = spawnPoint.transform.position;
+		spawnPoint.GetComponent<SpawnPointController>().isOccupied = true;
 
 		GameObject leaf = Instantiate (mapleLeaf, position, Quaternion.identity) as GameObject;
 
 		leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, activeColors.Count)];
+
 		leavesOnMap.Add(leaf);
 	}
 }

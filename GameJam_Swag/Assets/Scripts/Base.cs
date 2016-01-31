@@ -8,12 +8,13 @@ public class Base : MonoBehaviour {
 	public List<GameObject> gems = new List<GameObject>();
 
 	public GameObject vulnerableGem;
-
+	public SpawnManager spawnManager;
 	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
+		spawnManager = FindObjectOfType<SpawnManager> ();
 	}
 	
 	// Update is called once per frame
@@ -53,6 +54,7 @@ public class Base : MonoBehaviour {
 						if(vulnerableGem != null)
 						{
 							Destroy(vulnerableGem);
+							spawnManager.SpawnLeaf();
 						}
 						vulnerableGem = player.leafInArms;
 						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
@@ -93,7 +95,7 @@ public class Base : MonoBehaviour {
 							player.playerShadow.color = player.activeColor;
 
 							// Spawn a new leaf
-							player.gameManager.spawnManager.SpawnLeaf();
+							// player.gameManager.spawnManager.SpawnLeaf();
 						}
 					}
 					else
