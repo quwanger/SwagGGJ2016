@@ -7,6 +7,7 @@ public class MapleLeaf : MonoBehaviour {
 	public PlayerController carrier;
 	public bool isBeingThrown = false;
 	public PlayerController captor;
+	public PlayerController thrower;
 
 	// Use this for initialization
 	void Start () {
@@ -21,11 +22,14 @@ public class MapleLeaf : MonoBehaviour {
 
 			this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
 
-			if(this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude < 1f && this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude != 0f)
+			float tempMag = this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude;
+
+			if(tempMag < 1f && tempMag != 0)
 			{
 				this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
 				isBeingThrown = false;
 				this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(0, 0);
+				thrower = null;
 			}
 		}
 
@@ -43,6 +47,7 @@ public class MapleLeaf : MonoBehaviour {
 					}
 					tempPlayer.Stun ();
 				}
+				ChangeLeafColor(thrower.activeColor);
 			}else if (coll.gameObject.GetComponent<MapleLeaf> ()) {
 				if(coll.gameObject.GetComponent<MapleLeaf>().carrier != null)
 				{
@@ -54,6 +59,7 @@ public class MapleLeaf : MonoBehaviour {
 						}
 						tempPlayer.Stun ();
 					}
+					ChangeLeafColor(thrower.activeColor);
 				}
 			}
 		}
@@ -62,6 +68,12 @@ public class MapleLeaf : MonoBehaviour {
 	public void ChangeLeafColorRandom()
 	{
 		leafColor = GameObject.Find ("GameManager").GetComponent<SpawnManager> ().possibleColors [Random.Range (0, GameObject.Find ("GameManager").GetComponent<GameManager> ().colorCount)];
+		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
+	}
+
+	public void ChangeLeafColor(Color color)
+	{
+		leafColor = color;
 		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
 	}
 }

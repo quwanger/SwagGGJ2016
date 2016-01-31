@@ -205,7 +205,9 @@ public class PlayerController : MonoBehaviour {
 
 		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
-		leafInArms.transform.parent = transform.parent;
+		Debug.Log (transform.parent);
+		leafInArms.transform.parent = null;
+
 		leafInArms.GetComponent<Collider2D> ().isTrigger = false;
 		leafInArms.GetComponent<MapleLeaf> ().carrier = null;
 		if (targetPosition != default(Vector3)) {
@@ -213,6 +215,7 @@ public class PlayerController : MonoBehaviour {
 			leafInArms.GetComponent<Rigidbody2D> ().isKinematic = false;
 			leafInArms.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (targetPosition.x - transform.position.x, targetPosition.y - transform.position.y).normalized * (200f * throwLine.localScale.y));
 			leafInArms.GetComponent<MapleLeaf> ().isBeingThrown = true;
+			leafInArms.GetComponent<MapleLeaf>().thrower = this;
 		}
 		leafInArms = null;
 		pState = playerState.Idle;

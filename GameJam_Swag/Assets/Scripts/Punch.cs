@@ -33,7 +33,7 @@ public class Punch : MonoBehaviour {
 			{
 				victim.leafInArms.transform.parent = this.transform.parent;
 				victim.leafInArms.transform.position = this.transform.position;
-				victim.leafInArms.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
+				//victim.leafInArms.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
 				victim.leafInArms.GetComponent<MapleLeaf>().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
 
 				if(victim.pState == PlayerController.playerState.Throwing)
@@ -56,7 +56,7 @@ public class Punch : MonoBehaviour {
 					other.gameObject.GetComponent<MapleLeaf>().carrier.CancelThrow();
 				}
 				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
-				other.gameObject.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
+				//other.gameObject.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
 			}
 			else if(other.gameObject.GetComponent<MapleLeaf>().captor != null)
 			{

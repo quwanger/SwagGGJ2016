@@ -98,6 +98,13 @@ public class GameManager : MonoBehaviour {
 			playerBase.resetBase();
 		}
 
+		MapleLeaf[] leaves = GameObject.FindObjectsOfType<MapleLeaf>();
+		foreach (MapleLeaf go in leaves) {
+			go.captor = null;
+			go.carrier = null;
+			Destroy(go.gameObject);
+		}
+
 		// Set the game to finished
 		spawnManager.gameHasStarted = false;
 
@@ -112,7 +119,14 @@ public class GameManager : MonoBehaviour {
 		// Respawn players at home
 		foreach (PlayerController pc in activePlayers) {
 			pc.transform.position = pc.GetComponent<PlayerController> ().myBase.transform.position;
+			if(pc.pState == PlayerController.playerState.Throwing)
+				pc.CancelThrow();
+			pc.pState = PlayerController.playerState.Idle;
+			pc.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
 		}
+
+		Camera.main.transform.position = new Vector3(0, 0, -10f);
+		Camera.main.transform.eulerAngles = new Vector3(0, 0, 0);
 
 		Initiate();
 	}

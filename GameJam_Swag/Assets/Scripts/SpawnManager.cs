@@ -67,7 +67,7 @@ public class SpawnManager : MonoBehaviour {
 
 		// Create leaves and spawn them on the map with a color
 
-		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
+		for (int i = 0; i < gameManager.activePlayers.Count + 2; i++){
 			SpawnLeaf();
 		}
 	}
