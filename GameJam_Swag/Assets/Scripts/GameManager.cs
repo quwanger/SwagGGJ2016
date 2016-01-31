@@ -122,7 +122,8 @@ public class GameManager : MonoBehaviour {
 		spawnManager.possibleColors [5] = new Color (255f/255f, 175f/255f, 218f/255f);
 		spawnManager.possibleColors [6] = new Color (255f/255f, 146f/255f, 0f/255f);
 		
-		colorCount = Random.Range (minColors, totalColors);
+		colorCount = Random.Range (minColors, (totalColors+1));
+		Debug.Log ("Color Count: " + colorCount);
 		sequenceCount = Random.Range (minSequence, maxSequence);
 	}
 
