@@ -32,10 +32,9 @@ public class GameManager : MonoBehaviour {
 		grab,
 		throwStart,
 		throwEnd,
-		powerPickup,
-		powerRelease,
 		leafNo,
-		leafYes
+		leafYes,
+		intro
 	};
 
 	// Use this for initialization
@@ -53,6 +52,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Initiate() {
+		soundManager.PlaySound (SoundType.intro);
+
 		// Resets gem requirements
 		// Check if there's more than 1 player in the game
 		// Check if the game is currently set to started

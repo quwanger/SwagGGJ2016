@@ -100,6 +100,7 @@ public class Base : MonoBehaviour {
 					}
 					else
 					{
+						gameManager.soundManager.PlaySound (GameManager.SoundType.leafNo);
 						//don't score!
 						Debug.Log ("WRONG BASE NOOB!");
 					}

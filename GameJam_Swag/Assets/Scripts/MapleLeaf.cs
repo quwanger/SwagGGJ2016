@@ -7,10 +7,13 @@ public class MapleLeaf : MonoBehaviour {
 	public PlayerController carrier;
 	public bool isBeingThrown = false;
 	public PlayerController captor;
+	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
+
+		gameManager = FindObjectOfType<GameManager> ();
 	}
 	
 	// Update is called once per frame
@@ -33,8 +36,12 @@ public class MapleLeaf : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
+		gameManager.soundManager.PlaySound(GameManager.SoundType.grab);
+
 		if (isBeingThrown) {
 			if (coll.gameObject.GetComponent<PlayerController> ()) {
+				gameManager.soundManager.PlaySound(GameManager.SoundType.grab);
+
 				PlayerController tempPlayer = coll.gameObject.GetComponent<PlayerController> ();
 				if (tempPlayer.pState != PlayerController.playerState.Stunned) {
 					if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying)

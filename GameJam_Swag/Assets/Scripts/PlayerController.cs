@@ -179,6 +179,7 @@ public class PlayerController : MonoBehaviour {
 		} else if(startThrow) {
 			if(target.gameObject.activeSelf)
 			{
+
 				ThrowLeaf(target.position);
 			}else
 			{
@@ -198,8 +199,6 @@ public class PlayerController : MonoBehaviour {
 	public void ThrowLeaf(Vector3 targetPosition=default(Vector3))
 	{
 		startThrow = false;
-
-		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
 		leafInArms.transform.parent = transform.parent;
 		leafInArms.GetComponent<Collider2D> ().isTrigger = false;
