@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
 	private GameObject currentMap;
 
 	private GameObject gameEndMessage = null;
+	private GameObject gameEndTitle = null;
 
 	public int colorCount;
 	public int sequenceCount;
@@ -128,8 +129,13 @@ public class GameManager : MonoBehaviour {
 	{
 		currentGod = winner;
 		Debug.Log (winner.character.ToString() + " has won!");
-		gameEndMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
-		gameEndMessage.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/victory_" + currentGod.character.ToString ()) as Sprite;
+
+		gameEndTitle = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, 1.5f, -18f), Quaternion.identity) as GameObject;
+		gameEndTitle.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_yearofthe") as Sprite;
+
+		gameEndMessage = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, -1.5f, -18f), Quaternion.identity) as GameObject;
+		gameEndMessage.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_" + currentGod.character.ToString ()) as Sprite;
+
 		godModeStartTime = Time.time;
 		inGodMode = true;
 		StartGodMode (currentGod);
@@ -164,6 +170,10 @@ public class GameManager : MonoBehaviour {
 
 	public void ResetRound() {
 
+		if (gameEndTitle != null) {
+			Destroy(gameEndTitle);
+		}
+
 		if (gameEndMessage != null) {
 			Destroy(gameEndMessage);
 		}
@@ -179,9 +189,6 @@ public class GameManager : MonoBehaviour {
 			go.carrier = null;
 			Destroy(go.gameObject);
 		}
-
-		// Set the game to finished
-		spawnManager.gameHasStarted = false;
 
 		// Remove all maple leafs
 		foreach (GameObject leaf in spawnManager.leavesOnMap) {
@@ -202,6 +209,11 @@ public class GameManager : MonoBehaviour {
 
 		Camera.main.transform.position = new Vector3(0, 0, -10f);
 		Camera.main.transform.eulerAngles = new Vector3(0, 0, 0);
+
+		// Set the game to finished
+		spawnManager.gameHasStarted = false;
+		spawnManager.countdownStart = false;
+		spawnManager.StartCountdown ();
 
 		Initiate();
 	}
