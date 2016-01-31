@@ -79,7 +79,12 @@ public class PlayerController : MonoBehaviour {
 
 		gameManager.activePlayers.Add (this);
 
-		StartRound ();
+		gameManager.spawnManager.CheckStart ();
+
+		if (gameManager.spawnManager.gameHasStarted) {
+			StartRound ();
+			gameManager.spawnManager.SpawnLeaf();
+		}
 	}
 
 	public void StartRound()
@@ -111,87 +116,86 @@ public class PlayerController : MonoBehaviour {
 			vibrationIntensity = 0;
 		}
 
+		if (gameManager.spawnManager.gameHasStarted) {
 //----- HANDLES PLAYER MOVEMENT
 
-		float tempSpeed = movementSpeed;
+			float tempSpeed = movementSpeed;
 
-		if (pState == playerState.Idle || pState == playerState.Carrying) {
-			GamePad.SetVibration (WindowsCheckControllerToVibrate (), 0, 0);
-		}
-
-		if (pState == playerState.Carrying || pState == playerState.Throwing) {
-			tempSpeed *= 0.9f;
-		}
-
-		if (pState != playerState.Stunned) {
-			movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * tempSpeed;
-			movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * tempSpeed * -1;
-
-			//Debug.Log (playerId + " " + Input.GetAxis (("RightTrigger" + playerId).ToString ()));
-
-			this.gameObject.transform.GetChild (0).gameObject.transform.localEulerAngles = new Vector3 (0, 0, Mathf.Rad2Deg * (Mathf.Atan2 (movementVector.y, movementVector.x)) - 270f);
-
-			movementVector.x = Mathf.Lerp (rb.velocity.x, movementVector.x, dragConstant);
-			movementVector.y = Mathf.Lerp (rb.velocity.y, movementVector.y, dragConstant);
-
-			rb.velocity = movementVector;
-			this.gameObject.transform.localEulerAngles = new Vector3 (0f, 0f, 0f);
-		} else {
-			vibrationIntensity = 100.0f;
-
-			GamePad.SetVibration(WindowsCheckControllerToVibrate(), vibrationIntensity, vibrationIntensity);
-
-			if(Time.time > (stunStartTime + playerManager.stunDuration))
-			{
-				pState = playerState.Idle;
-
-				GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
+			if (pState == playerState.Idle || pState == playerState.Carrying) {
+				GamePad.SetVibration (WindowsCheckControllerToVibrate (), 0, 0);
 			}
-		}
 
-//----- HANDLES PLAYER ACTION
-		if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f) {
-			// Actual vibration
-			GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
+			if (pState == playerState.Carrying || pState == playerState.Throwing) {
+				tempSpeed *= 0.9f;
+			}
 
-			if (Time.time > punchResetTime) {
-				switch (pState) {
-				case playerState.Idle:
-					//punch
-					Punch ();
-					break;
-				case playerState.Carrying:
-					pState = playerState.Throwing;
-					startThrow = true;
-					throwStartTime = Time.time;
-					break;
-				case playerState.Punching:
-					//nothing
-					break;
-				case playerState.Stunned:
-					//nothing
-					break;
-				case playerState.Throwing:
-					//nothing
-					break;
+			if (pState != playerState.Stunned) {
+				movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * tempSpeed;
+				movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * tempSpeed * -1;
+
+				//Debug.Log (playerId + " " + Input.GetAxis (("RightTrigger" + playerId).ToString ()));
+
+				this.gameObject.transform.GetChild (0).gameObject.transform.localEulerAngles = new Vector3 (0, 0, Mathf.Rad2Deg * (Mathf.Atan2 (movementVector.y, movementVector.x)) - 270f);
+
+				movementVector.x = Mathf.Lerp (rb.velocity.x, movementVector.x, dragConstant);
+				movementVector.y = Mathf.Lerp (rb.velocity.y, movementVector.y, dragConstant);
+
+				rb.velocity = movementVector;
+				this.gameObject.transform.localEulerAngles = new Vector3 (0f, 0f, 0f);
+			} else {
+				vibrationIntensity = 100.0f;
+
+				GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
+
+				if (Time.time > (stunStartTime + playerManager.stunDuration)) {
+					pState = playerState.Idle;
+
+					GamePad.SetVibration (WindowsCheckControllerToVibrate (), 0, 0);
 				}
 			}
-		} else if(startThrow) {
-			if(target.gameObject.activeSelf)
-			{
-				ThrowLeaf(target.position);
-			}else
-			{
-				ThrowLeaf();
-			}
-		}
 
-		if (startThrow && (Time.time > (throwStartTime + timeBeforeThrowBegins))) {
-			throwLine.gameObject.SetActive(true);
-			target.gameObject.SetActive(true);
+//----- HANDLES PLAYER ACTION
+			if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f) {
+				// Actual vibration
+				GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
+
+				if (Time.time > punchResetTime) {
+					switch (pState) {
+					case playerState.Idle:
+					//punch
+						Punch ();
+						break;
+					case playerState.Carrying:
+						pState = playerState.Throwing;
+						startThrow = true;
+						throwStartTime = Time.time;
+						break;
+					case playerState.Punching:
+					//nothing
+						break;
+					case playerState.Stunned:
+					//nothing
+						break;
+					case playerState.Throwing:
+					//nothing
+						break;
+					}
+				}
+			} else if (startThrow) {
+				if (target.gameObject.activeSelf) {
+					ThrowLeaf (target.position);
+				} else {
+					ThrowLeaf ();
+				}
+			}
+
+			if (startThrow && (Time.time > (throwStartTime + timeBeforeThrowBegins))) {
+				throwLine.gameObject.SetActive (true);
+				target.gameObject.SetActive (true);
 			
-			throwLine.localScale = new Vector3(throwLine.localScale.x, throwLine.localScale.y+0.1f, throwLine.localScale.z);
-			target.localPosition = new Vector3(0f, -3.4f * throwLine.localScale.y, -10f);
+				throwLine.localScale = new Vector3 (throwLine.localScale.x, throwLine.localScale.y + 0.1f, throwLine.localScale.z);
+				target.localPosition = new Vector3 (0f, -3.4f * throwLine.localScale.y, -10f);
+			}
 		}
 	}
 
@@ -201,7 +205,9 @@ public class PlayerController : MonoBehaviour {
 
 		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
-		leafInArms.transform.parent = transform.parent;
+		Debug.Log (transform.parent);
+		leafInArms.transform.parent = null;
+
 		leafInArms.GetComponent<Collider2D> ().isTrigger = false;
 		leafInArms.GetComponent<MapleLeaf> ().carrier = null;
 		if (targetPosition != default(Vector3)) {
@@ -209,6 +215,7 @@ public class PlayerController : MonoBehaviour {
 			leafInArms.GetComponent<Rigidbody2D> ().isKinematic = false;
 			leafInArms.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (targetPosition.x - transform.position.x, targetPosition.y - transform.position.y).normalized * (200f * throwLine.localScale.y));
 			leafInArms.GetComponent<MapleLeaf> ().isBeingThrown = true;
+			leafInArms.GetComponent<MapleLeaf>().thrower = this;
 		}
 		leafInArms = null;
 		pState = playerState.Idle;

@@ -29,6 +29,10 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
+	void Start() {
+		Debug.Log ("DFDFDF");
+	}
+
 	// Setup outer wall and floor
 	void BoardSetup() {
 		boardHolder = new GameObject ("Board").transform;

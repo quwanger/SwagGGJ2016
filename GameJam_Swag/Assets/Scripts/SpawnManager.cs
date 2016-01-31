@@ -14,6 +14,10 @@ public class SpawnManager : MonoBehaviour {
 
 	public List<GameObject> leavesOnMap = new List<GameObject>();
 
+	private float countdownDuration = 3.0f;
+	private float countdownStartTime;
+	private bool countdownStart = false;
+
 	// Use this for initialization
 	void Start () {
 		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
@@ -28,15 +32,28 @@ public class SpawnManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (!gameHasStarted) {
+			if (countdownStart) {
+				if (Time.time > (countdownStartTime + countdownDuration)) {
+					countdownStart = false;
+					StartGame ();
+				}
+			}
+		}
 	}
 
 	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
 		if (gameManager.activePlayers.Count >= 1 && !gameHasStarted) {
-			StartGame ();
+			StartCountdown();
 		}
+	}
+
+	private void StartCountdown()
+	{
+		countdownStart = true;
+		countdownStartTime = Time.time;
 	}
 
 	private void StartGame()
@@ -44,8 +61,13 @@ public class SpawnManager : MonoBehaviour {
 		gameHasStarted = true;
 		Debug.Log ("GAME HAS STARTED");
 
+		foreach (PlayerController player in gameManager.activePlayers) {
+			player.StartRound();
+		}
+
 		// Create leaves and spawn them on the map with a color
-		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
+
+		for (int i = 0; i < gameManager.activePlayers.Count + 2; i++){
 			SpawnLeaf();
 		}
 	}

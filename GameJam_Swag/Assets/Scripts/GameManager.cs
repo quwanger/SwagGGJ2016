@@ -75,13 +75,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void InitializeGemConfiguration () {
-		spawnManager.possibleColors [0] = new Color (1f, 0, 0);
-		spawnManager.possibleColors [1] = new Color (1f, 0.5f, 0);
-		spawnManager.possibleColors [2] = new Color (1f, 1f, 0);
-		spawnManager.possibleColors [3] = new Color (0, 1f, 0);
-		spawnManager.possibleColors [4] = new Color (0, 1f, 1f);
-		spawnManager.possibleColors [5] = new Color (0, 0, 1f);
-		spawnManager.possibleColors [6] = new Color (0.5f, 0, 1f);
+		spawnManager.possibleColors [0] = new Color (255f/255f, 44f/255f, 0f/255f);
+		spawnManager.possibleColors [1] = new Color (0f/255f, 246f/255f, 255f/255f);
+		spawnManager.possibleColors [2] = new Color (255f/255f, 252f/255f, 0f/255f);
+		spawnManager.possibleColors [3] = new Color (0f/255f, 252f/255f, 0f/255f);
+		spawnManager.possibleColors [4] = new Color (196f/255f, 0f/255f, 252f/255f);
+		spawnManager.possibleColors [5] = new Color (255f/255f, 175f/255f, 218f/255f);
+		spawnManager.possibleColors [6] = new Color (255f/255f, 146f/255f, 0f/255f);
 		
 		colorCount = Random.Range (minColors, totalColors);
 		sequenceCount = Random.Range (minSequence, maxSequence);
@@ -98,6 +98,13 @@ public class GameManager : MonoBehaviour {
 			playerBase.resetBase();
 		}
 
+		MapleLeaf[] leaves = GameObject.FindObjectsOfType<MapleLeaf>();
+		foreach (MapleLeaf go in leaves) {
+			go.captor = null;
+			go.carrier = null;
+			Destroy(go.gameObject);
+		}
+
 		// Set the game to finished
 		spawnManager.gameHasStarted = false;
 
@@ -112,7 +119,14 @@ public class GameManager : MonoBehaviour {
 		// Respawn players at home
 		foreach (PlayerController pc in activePlayers) {
 			pc.transform.position = pc.GetComponent<PlayerController> ().myBase.transform.position;
+			if(pc.pState == PlayerController.playerState.Throwing)
+				pc.CancelThrow();
+			pc.pState = PlayerController.playerState.Idle;
+			pc.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
 		}
+
+		Camera.main.transform.position = new Vector3(0, 0, -10f);
+		Camera.main.transform.eulerAngles = new Vector3(0, 0, 0);
 
 		Initiate();
 	}
