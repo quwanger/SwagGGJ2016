@@ -43,10 +43,7 @@ public class Base : MonoBehaviour {
 						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
 						transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOn");
 
-						if(player.pState == PlayerController.playerState.Throwing)
-						{
-							player.CancelThrow();
-						}
+
 
 						// Disable effect in the gem history
 						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();
@@ -64,6 +61,11 @@ public class Base : MonoBehaviour {
 						player.leafInArms.GetComponent<MapleLeaf>().captor = player;
 						player.leafInArms.GetComponent<MapleLeaf>().carrier = null;
 						player.leafInArms = null;
+
+						if(player.pState == PlayerController.playerState.Throwing)
+						{
+							player.CancelThrow();
+						}
 
 						//Destroy(player.leafInArms.gameObject);
 

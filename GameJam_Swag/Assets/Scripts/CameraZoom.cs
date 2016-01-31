@@ -8,7 +8,7 @@ public class CameraZoom : MonoBehaviour {
 	private bool zoomIn = false;
 	public GameObject character;
 	public Vector3 originalCameraPosition;
-	private float targetSize = 3f;
+	private float targetSize = 3.5f;
 
 	void Start () {
 		defaultSize = Camera.main.orthographicSize;

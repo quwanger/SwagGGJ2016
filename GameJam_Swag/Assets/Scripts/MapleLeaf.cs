@@ -32,6 +32,33 @@ public class MapleLeaf : MonoBehaviour {
 		//Debug.Log ("(" + this.gameObject.GetComponent<Rigidbody2D> ().velocity.x + ", " + this.gameObject.GetComponent<Rigidbody2D> ().velocity.y + ")");
 	}
 
+	void OnCollisionEnter2D(Collision2D coll){
+		if (isBeingThrown) {
+			if (coll.gameObject.GetComponent<PlayerController> ()) {
+				PlayerController tempPlayer = coll.gameObject.GetComponent<PlayerController> ();
+				if (tempPlayer.pState != PlayerController.playerState.Stunned) {
+					if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying)
+					{
+						tempPlayer.ThrowLeaf(default(Vector3));
+					}
+					tempPlayer.Stun ();
+				}
+			}else if (coll.gameObject.GetComponent<MapleLeaf> ()) {
+				if(coll.gameObject.GetComponent<MapleLeaf>().carrier != null)
+				{
+					PlayerController tempPlayer = coll.gameObject.GetComponent<MapleLeaf> ().carrier.GetComponent<PlayerController>();
+					if (tempPlayer.pState != PlayerController.playerState.Stunned) {
+						if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying)
+						{
+							tempPlayer.ThrowLeaf(default(Vector3));
+						}
+						tempPlayer.Stun ();
+					}
+				}
+			}
+		}
+	}
+
 	public void ChangeLeafColorRandom()
 	{
 		leafColor = GameObject.Find ("GameManager").GetComponent<SpawnManager> ().possibleColors [Random.Range (0, GameObject.Find ("GameManager").GetComponent<GameManager> ().colorCount)];

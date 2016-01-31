@@ -31,15 +31,15 @@ public class Punch : MonoBehaviour {
 			}
 			else if(victim.pState == PlayerController.playerState.Carrying || victim.pState == PlayerController.playerState.Throwing)
 			{
-				if(victim.pState == PlayerController.playerState.Throwing)
-				{
-					victim.CancelThrow();
-				}
-
 				victim.leafInArms.transform.parent = this.transform.parent;
 				victim.leafInArms.transform.position = this.transform.position;
 				victim.leafInArms.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
 				victim.leafInArms.GetComponent<MapleLeaf>().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
+
+				if(victim.pState == PlayerController.playerState.Throwing)
+				{
+					victim.CancelThrow();
+				}
 
 				this.transform.parent.transform.parent.GetComponent<PlayerController> ().leafInArms = victim.leafInArms;
 				victim.Stun();
@@ -51,6 +51,10 @@ public class Punch : MonoBehaviour {
 			//pick up maple leaf
 			if(other.gameObject.GetComponent<MapleLeaf>().carrier != null)
 			{
+				if(other.gameObject.GetComponent<MapleLeaf>().carrier.pState == PlayerController.playerState.Throwing)
+				{
+					other.gameObject.GetComponent<MapleLeaf>().carrier.CancelThrow();
+				}
 				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
 				other.gameObject.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
 			}
@@ -63,7 +67,7 @@ public class Punch : MonoBehaviour {
 				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex+1].GetComponent<Gem>().StolenGem();
 				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex].GetComponent<Gem>().ReactivateGem();
 				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].vulnerableGem = null;
-				Debug.Log ("Who's base? " + tempPlayer.character.ToString() + " , What base? " + transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId].playerId);
+				//Debug.Log ("Who's base? " + tempPlayer.character.ToString() + " , What base? " + transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId].playerId);
 				GameObject.Find("GameManager").GetComponent<SpawnManager>().leavesOnMap.Add(other.gameObject);
 				other.gameObject.GetComponent<MapleLeaf>().captor = null;
 			}

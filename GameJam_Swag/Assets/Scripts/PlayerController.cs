@@ -195,36 +195,36 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	private void ThrowLeaf(Vector3 targetPosition=default(Vector3))
+	public void ThrowLeaf(Vector3 targetPosition=default(Vector3))
 	{
 		startThrow = false;
 
 		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
-		
+
 		leafInArms.transform.parent = transform.parent;
 		leafInArms.GetComponent<Collider2D> ().isTrigger = false;
 		leafInArms.GetComponent<MapleLeaf> ().carrier = null;
 		if (targetPosition != default(Vector3)) {
 			//leafInArms.transform.position = targetPosition;
-			leafInArms.GetComponent<Rigidbody2D>().isKinematic = false;
-			leafInArms.GetComponent<Rigidbody2D>().AddForce(new Vector2(targetPosition.x - transform.position.x, targetPosition.y - transform.position.y).normalized*(200f * throwLine.localScale.y));
-			leafInArms.GetComponent<MapleLeaf>().isBeingThrown = true;
+			leafInArms.GetComponent<Rigidbody2D> ().isKinematic = false;
+			leafInArms.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (targetPosition.x - transform.position.x, targetPosition.y - transform.position.y).normalized * (200f * throwLine.localScale.y));
+			leafInArms.GetComponent<MapleLeaf> ().isBeingThrown = true;
 		}
 		leafInArms = null;
 		pState = playerState.Idle;
 		punchResetTime = (Time.time + this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchRecharge);
-		
-		throwLine.localScale = new Vector3(throwLine.localScale.x, 0f, throwLine.localScale.z);
-		target.localPosition = new Vector3(0f, 0f, -10f);
-		throwLine.gameObject.SetActive(false);
-		target.gameObject.SetActive(false);
+	
+		throwLine.localScale = new Vector3 (throwLine.localScale.x, 0f, throwLine.localScale.z);
+		target.localPosition = new Vector3 (0f, 0f, -10f);
+		throwLine.gameObject.SetActive (false);
+		target.gameObject.SetActive (false);
 	}
 
 	public void CancelThrow()
 	{
 		startThrow = false;
 
-		punchResetTime = (Time.time + this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchRecharge);
+		leafInArms = null;
 
 		throwLine.localScale = new Vector3(throwLine.localScale.x, 0f, throwLine.localScale.z);
 		target.localPosition = new Vector3(0f, 0f, -10f);
