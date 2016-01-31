@@ -1,0 +1,14 @@
+diff a/GameJam_Swag/Assets/Scripts/MapleLeaf.cs b/GameJam_Swag/Assets/Scripts/MapleLeaf.cs	(rejected hunks)
+@@ -36,8 +36,12 @@
+ 	}
+ 
+ 	void OnCollisionEnter2D(Collision2D coll){
++		gameManager.soundManager.PlaySound(GameManager.SoundType.grab);
++
+ 		if (isBeingThrown) {
+ 			if (coll.gameObject.GetComponent<PlayerController> ()) {
++				gameManager.soundManager.PlaySound(GameManager.SoundType.grab);
++
+ 				PlayerController tempPlayer = coll.gameObject.GetComponent<PlayerController> ();
+ 				if (tempPlayer.pState != PlayerController.playerState.Stunned) {
+ 					if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying)

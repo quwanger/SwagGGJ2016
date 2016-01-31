@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 			vibrationIntensity = 0;
 		}
 
-		if (gameManager.spawnManager.gameHasStarted) {
+		if (gameManager.spawnManager.gameHasStarted && !gameManager.inGodMode) {
 //----- HANDLES PLAYER MOVEMENT
 
 			float tempSpeed = movementSpeed;

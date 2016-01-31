@@ -18,6 +18,8 @@ public class SpawnManager : MonoBehaviour {
 	private float countdownStartTime;
 	private bool countdownStart = false;
 
+	private GameObject gameStartMessage = null;
+
 	// Use this for initialization
 	void Start () {
 		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
@@ -36,6 +38,7 @@ public class SpawnManager : MonoBehaviour {
 			if (countdownStart) {
 				if (Time.time > (countdownStartTime + countdownDuration)) {
 					countdownStart = false;
+					Destroy(gameStartMessage);
 					StartGame ();
 				}
 			}
@@ -47,11 +50,14 @@ public class SpawnManager : MonoBehaviour {
 	{
 		if (gameManager.activePlayers.Count >= 1 && !gameHasStarted) {
 			StartCountdown();
+
 		}
 	}
 
 	private void StartCountdown()
 	{
+		Destroy (gameStartMessage);
+		gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
 		countdownStart = true;
 		countdownStartTime = Time.time;
 	}
@@ -59,6 +65,7 @@ public class SpawnManager : MonoBehaviour {
 	private void StartGame()
 	{
 		gameHasStarted = true;
+
 		Debug.Log ("GAME HAS STARTED");
 
 		foreach (PlayerController player in gameManager.activePlayers) {

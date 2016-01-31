@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 	public SoundManager soundManager;
 	public List<PlayerController> activePlayers = new List<PlayerController>();
 	public List<Base> bases = new List<Base>();
+	public List<GameObject> maps = new List<GameObject>();
 	public Camera mainCamera;
 
 	public const int totalColors = 7;
@@ -16,9 +17,19 @@ public class GameManager : MonoBehaviour {
 	public const int maxSequence = 7;
 	public const int minSequence = 3;
 
+	private float godModeDuration = 10.0f;
+	private float godModeStartTime;
+	public bool inGodMode = false;
+	private PlayerController currentGod;
+	private float godScale = 3.0f;
+	private Vector3 originalScale = new Vector3(0.267742f, 0.267742f, 0.267742f);
+	private GameObject currentMap;
+
+	private GameObject gameEndMessage = null;
+
 	public int colorCount;
 	public int sequenceCount;
-
+	
 	// For sound
 	public enum SoundType {
 		bear,
@@ -58,6 +69,13 @@ public class GameManager : MonoBehaviour {
 		// Check if the game is currently set to started
 		// Mark the game as started
 		// Add Leaves to map
+
+		if (currentMap != null) {
+			Destroy(currentMap);
+		}
+
+		currentMap = Instantiate<GameObject> (maps[Random.Range(0, maps.Count)]);
+
 		InitializeGemConfiguration ();
 
 		// Activate the game
@@ -66,12 +84,26 @@ public class GameManager : MonoBehaviour {
 		}
 
 		spawnManager.Initiate ();
-
 	}
 
 	// Update is called once per frame
 	void Update () {
-	
+		if (inGodMode) {
+			Camera.main.GetComponent<CameraShake>().Shake();
+
+			float tempScale = Mathf.Lerp(currentGod.transform.localScale.x, godScale, Time.deltaTime);
+			currentGod.transform.localScale = new Vector3 (tempScale, tempScale, 1f);
+
+			if(Time.time > (godModeStartTime + godModeDuration))
+			{
+				currentGod.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + currentGod.character.ToString() + "_Body");
+				currentGod.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + currentGod.character.ToString() + "_Head");
+				currentGod.gameObject.transform.localScale = new Vector3(0.267742f, 0.267742f, 1f);
+				inGodMode = false;
+				currentGod = null;
+				ResetRound();
+			}
+		}
 	}
 
 	public void InitializeGemConfiguration () {
@@ -89,10 +121,33 @@ public class GameManager : MonoBehaviour {
 
 	public void DeclareWinner(PlayerController winner)
 	{
+		currentGod = winner;
 		Debug.Log (winner.character.ToString() + " has won!");
+		gameEndMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+		gameEndMessage.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/victory_" + currentGod.character.ToString ()) as Sprite;
+		godModeStartTime = Time.time;
+		inGodMode = true;
+		StartGodMode (currentGod);
+	}
+
+	public void StartGodMode(PlayerController god){
+		god.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + god.character.ToString() + "_God_Body");
+		god.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + god.character.ToString() + "_God_Head");
+
+		BoxCollider2D[] collisionObjects = FindObjectsOfType<BoxCollider2D> ();
+		foreach(BoxCollider2D bc in collisionObjects)
+		{
+			Rigidbody2D rb = bc.gameObject.AddComponent<Rigidbody2D>();
+			rb.gravityScale = 0;
+		}
 	}
 
 	public void ResetRound() {
+
+		if (gameEndMessage != null) {
+			Destroy(gameEndMessage);
+		}
+
 		// Reset bases
 		foreach(Base playerBase in bases) {
 			playerBase.resetBase();

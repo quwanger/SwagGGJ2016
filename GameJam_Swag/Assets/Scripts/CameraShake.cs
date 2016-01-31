@@ -24,7 +24,7 @@ public class CameraShake : MonoBehaviour {
 				originRotation.w + Random.Range (-shake_intensity, shake_intensity) * .2f);
 			shake_intensity -= shake_decay;
 		} else {
-			transform.position = new Vector3(0, 0, -10);
+			transform.position = new Vector3(0, 0, -30);
 			transform.rotation = new Quaternion (0, 0, 0, 0);
 		}
 	}

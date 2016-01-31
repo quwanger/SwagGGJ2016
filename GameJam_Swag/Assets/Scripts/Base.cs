@@ -80,7 +80,7 @@ public class Base : MonoBehaviour {
 							player.gameManager.DeclareWinner(player);
 
 							// Restart game
-							gameManager.ResetRound();
+							//gameManager.ResetRound();
 						} 
 
 						// If player didn't win
