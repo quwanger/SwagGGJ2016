@@ -15,8 +15,8 @@ public class SpawnManager : MonoBehaviour {
 	public List<GameObject> leavesOnMap = new List<GameObject>();
 
 	private float countdownDuration = 3.0f;
-	private float countdownStartTime;
-	private bool countdownStart = false;
+	public float countdownStartTime;
+	public bool countdownStart = false;
 
 	private GameObject gameStartMessage = null;
 	private GameObject gameCountdown01 = null;
@@ -39,7 +39,7 @@ public class SpawnManager : MonoBehaviour {
 	void Update () {
 		if (!gameHasStarted) {
 			if (countdownStart) {
-				Debug.Log((countdownStartTime + countdownDuration) - Time.time);
+				//Debug.Log((countdownStartTime + countdownDuration) - Time.time);
 
 				if ((countdownStartTime + countdownDuration) - Time.time > 2.0f) {
 					Destroy (gameCountdown03);
@@ -61,25 +61,51 @@ public class SpawnManager : MonoBehaviour {
 					Destroy (gameCountdown03);
 					Destroy (gameCountdown02);
 					Destroy (gameCountdown01);
+
+					GameObject starPart = Instantiate (Resources.Load<GameObject> ("Prefabs/StarParticleBig"), new Vector3(0, 0, 0),Quaternion.identity) as GameObject;
+					Camera.main.GetComponent<CameraShake>().Shake();
+					Destroy (starPart, 3);
+
 					StartGame ();
 				}
 			}
+		}
+
+		if (gameManager.activePlayers.Count < 2 && countdownStart) {
+			CancelCountdown();	
 		}
 	}
 
 	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
-		if (gameManager.activePlayers.Count >= 1 && !gameHasStarted) {
+		if (gameManager.activePlayers.Count >= 1 && !countdownStart) {
 			StartCountdown();
 
 		}
 	}
 
-	private void StartCountdown()
+	//cancel countdown if someone leaves before countdown ends
+	public void CancelCountdown()
+	{
+		countdownStart = false;
+		Destroy(gameStartMessage);
+		Destroy (gameCountdown03);
+		Destroy (gameCountdown02);
+		Destroy (gameCountdown01);
+	}
+
+	public void StartCountdown()
 	{
 		Destroy (gameStartMessage);
-		gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+
+		if (!gameHasStarted && !countdownStart) {
+			gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
+		}
+
+		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+
 		countdownStart = true;
 		countdownStartTime = Time.time;
 	}
@@ -96,7 +122,7 @@ public class SpawnManager : MonoBehaviour {
 
 		// Create leaves and spawn them on the map with a color
 
-		for (int i = 0; i < gameManager.activePlayers.Count + 2; i++){
+		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
 			SpawnLeaf();
 		}
 	}

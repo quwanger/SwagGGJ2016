@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	public GameManager gameManager;
 
     public Camera mainCamera;
-	private int playerId = 1;
+	public int playerId = 1;
 	public PlayerManager.PlayerCharacter character;
 
 	public SpriteRenderer playerShadow;
@@ -83,7 +83,10 @@ public class PlayerController : MonoBehaviour {
 
 		if (gameManager.spawnManager.gameHasStarted) {
 			StartRound ();
-			gameManager.spawnManager.SpawnLeaf();
+			if(gameManager.spawnManager.leavesOnMap.Count < (gameManager.activePlayers.Count + 1))
+			{
+				gameManager.spawnManager.SpawnLeaf();
+			}
 		}
 	}
 
@@ -116,7 +119,7 @@ public class PlayerController : MonoBehaviour {
 			vibrationIntensity = 0;
 		}
 
-		if (gameManager.spawnManager.gameHasStarted && !gameManager.inGodMode) {
+		if (gameManager.spawnManager.gameHasStarted) {
 //----- HANDLES PLAYER MOVEMENT
 
 			float tempSpeed = movementSpeed;
@@ -155,46 +158,49 @@ public class PlayerController : MonoBehaviour {
 			}
 
 //----- HANDLES PLAYER ACTION
-			if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f) {
-				// Actual vibration
-				GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
+			if(!gameManager.inGodMode)
+			{
+				if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f) {
+					// Actual vibration
+					GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
 
-				if (Time.time > punchResetTime) {
-					switch (pState) {
-					case playerState.Idle:
-					//punch
-						Punch ();
-						break;
-					case playerState.Carrying:
-						pState = playerState.Throwing;
-						startThrow = true;
-						throwStartTime = Time.time;
-						break;
-					case playerState.Punching:
-					//nothing
-						break;
-					case playerState.Stunned:
-					//nothing
-						break;
-					case playerState.Throwing:
-					//nothing
-						break;
+					if (Time.time > punchResetTime) {
+						switch (pState) {
+						case playerState.Idle:
+						//punch
+							Punch ();
+							break;
+						case playerState.Carrying:
+							pState = playerState.Throwing;
+							startThrow = true;
+							throwStartTime = Time.time;
+							break;
+						case playerState.Punching:
+						//nothing
+							break;
+						case playerState.Stunned:
+						//nothing
+							break;
+						case playerState.Throwing:
+						//nothing
+							break;
+						}
+					}
+				} else if (startThrow) {
+					if (target.gameObject.activeSelf) {
+						ThrowLeaf (target.position);
+					} else {
+						ThrowLeaf ();
 					}
 				}
-			} else if (startThrow) {
-				if (target.gameObject.activeSelf) {
-					ThrowLeaf (target.position);
-				} else {
-					ThrowLeaf ();
-				}
-			}
 
-			if (startThrow && (Time.time > (throwStartTime + timeBeforeThrowBegins))) {
-				throwLine.gameObject.SetActive (true);
-				target.gameObject.SetActive (true);
-			
-				throwLine.localScale = new Vector3 (throwLine.localScale.x, throwLine.localScale.y + 0.1f, throwLine.localScale.z);
-				target.localPosition = new Vector3 (0f, -3.4f * throwLine.localScale.y, -10f);
+				if (startThrow && (Time.time > (throwStartTime + timeBeforeThrowBegins))) {
+					throwLine.gameObject.SetActive (true);
+					target.gameObject.SetActive (true);
+				
+					throwLine.localScale = new Vector3 (throwLine.localScale.x, throwLine.localScale.y + 0.1f, throwLine.localScale.z);
+					target.localPosition = new Vector3 (0f, -3.4f * throwLine.localScale.y, -10f);
+				}
 			}
 		}
 	}
@@ -299,6 +305,21 @@ public class PlayerController : MonoBehaviour {
 
 		// Set state to punching
 		pState = playerState.Stunned;
+
+		switch (playerId) {
+		case 1:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
+			break;
+		case 2:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			break;
+		case 3:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
+			break;
+		case 4:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			break;
+		}
 
 		stunStartTime = Time.time;
 		leafInArms = null;
