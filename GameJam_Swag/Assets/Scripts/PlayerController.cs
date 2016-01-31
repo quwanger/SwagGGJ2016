@@ -86,8 +86,8 @@ public class PlayerController : MonoBehaviour {
 	{
 		myColors.Clear ();
 		SpawnManager sm = playerManager.gameObject.GetComponent<SpawnManager> ();
-		for (int i=0; i<sm.sequenceCount; i++){
-			Color tempColor = sm.possibleColors[Random.Range(0, sm.colorCount)];
+		for (int i=0; i<gameManager.sequenceCount; i++){
+			Color tempColor = sm.possibleColors[Random.Range(0, gameManager.colorCount)];
 			myColors.Add(tempColor);
 			myBase.gems[i].SetActive(true);
 			myBase.gems[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = tempColor;

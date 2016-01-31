@@ -1,20 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class SpawnManager : MonoBehaviour {
 
-	public const int totalColors = 7;
-	public const int minColors = 2;
-	public const int maxSequence = 7;
-	public const int minSequence = 3;
-
 	public GameManager gameManager;
 
 	public GameObject mapleLeaf;
-	
-	public int colorCount;
-	public int sequenceCount;
 
 	public bool gameHasStarted = false;
 
@@ -30,17 +22,6 @@ public class SpawnManager : MonoBehaviour {
 	// Initialize possible colors array
 	public void Initiate()
 	{
-		possibleColors [0] = new Color (255f/255f, 44f/255f, 0f/255f);
-		possibleColors [1] = new Color (0f/255f, 246f/255f, 255f/255f);
-		possibleColors [2] = new Color (255f/255f, 252f/255f, 0f/255f);
-		possibleColors [3] = new Color (0f/255f, 252f/255f, 0f/255f);
-		possibleColors [4] = new Color (196f/255f, 0f/255f, 252f/255f);
-		possibleColors [5] = new Color (255f/255f, 175f/255f, 218f/255f);
-		possibleColors [6] = new Color (255f/255f, 146f/255f, 0f/255f);
-
-		// Set amount of colors and length of sequence
-		BeginRound ();
-
 		// Start game if there's more than 1 player 
 		CheckStart ();
 	}
@@ -58,24 +39,18 @@ public class SpawnManager : MonoBehaviour {
 		}
 	}
 
-	private void BeginRound()
-	{
-		colorCount = Random.Range (minColors, totalColors);
-		sequenceCount = Random.Range (minSequence, maxSequence);
-	}
-
 	private void StartGame()
 	{
 		gameHasStarted = true;
 		Debug.Log ("GAME HAS STARTED");
 
-		// Create player count + 1 leaves and spawn them on the map with a color
+		// Create leaves and spawn them on the map with a color
 		for (int i = 0; i < gameManager.activePlayers.Count + 1; i++){
 			SpawnLeaf();
 		}
 	}
 
-	// Creates an instance of leaf with a spawn p0osition
+	// Creates an instance of leaf with a spawn position
 	public void SpawnLeaf()
 	{
 		List<Color> activeColors = new List<Color>();
@@ -83,8 +58,28 @@ public class SpawnManager : MonoBehaviour {
 		foreach (PlayerController pc in gameManager.activePlayers) {
 			activeColors.Add(pc.activeColor);
 		}
-		
-		Vector3 position = new Vector3 (Random.Range (-4F, 4F), Random.Range (-4F, 4F), 0);
+
+		// Spawn a leaf at a random RespawnPoint
+		List<GameObject> leafSpawnPoints = new List<GameObject> ();
+		leafSpawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
+		List<GameObject> validSpawnPoints = new List<GameObject> ();
+
+		// Prevent a spawn on same point
+		if (leavesOnMap.Count > 0) {
+			foreach (GameObject tempSpawnPoint in leafSpawnPoints) {
+				foreach (GameObject tempLeaf in leavesOnMap) {
+					if (tempLeaf.transform.position != tempSpawnPoint.transform.position) {
+						validSpawnPoints.Add (tempSpawnPoint);
+					}
+				}
+			}
+		} else {
+			validSpawnPoints = leafSpawnPoints;
+		}
+
+		// Get a random position from the list of possible spawn points
+		Vector3 position = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)].transform.position;
+
 		GameObject leaf = Instantiate (mapleLeaf, position, Quaternion.identity) as GameObject;
 
 		leaf.GetComponent<MapleLeaf>().leafColor = activeColors[Random.Range(0, activeColors.Count)];

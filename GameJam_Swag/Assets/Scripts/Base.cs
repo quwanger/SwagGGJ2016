@@ -65,7 +65,7 @@ public class Base : MonoBehaviour {
 						player.pState = PlayerController.playerState.Idle;
 
 						// If player won
-						if(player.currentGemIndex >= player.gameManager.spawnManager.sequenceCount) 
+						if(player.currentGemIndex >= gameManager.sequenceCount) 
 						{
 							player.gameManager.DeclareWinner(player);
 
