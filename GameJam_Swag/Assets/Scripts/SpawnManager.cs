@@ -66,6 +66,11 @@ public class SpawnManager : MonoBehaviour {
 					Camera.main.GetComponent<CameraShake>().Shake();
 					Destroy (starPart, 3);
 
+					GameObject go = Instantiate (Resources.Load<GameObject> ("Prefabs/Go"), new Vector3(0, 0, -18f),Quaternion.identity) as GameObject;
+					Destroy (go, 0.75f);
+
+					gameManager.soundManager.PlaySound (GameManager.SoundType.intro);
+
 					StartGame ();
 				}
 			}
@@ -79,9 +84,8 @@ public class SpawnManager : MonoBehaviour {
 	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
-		if (gameManager.activePlayers.Count >= 1 && !countdownStart) {
+		if (gameManager.activePlayers.Count > 1 && !countdownStart) {
 			StartCountdown();
-
 		}
 	}
 
@@ -101,10 +105,13 @@ public class SpawnManager : MonoBehaviour {
 
 		if (!gameHasStarted && !countdownStart) {
 			gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
-			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
 		}
 
 		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+		if (!gameHasStarted) {
+			Debug.Log ("PLAYING SOUND");
+			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
+		}
 
 		countdownStart = true;
 		countdownStartTime = Time.time;

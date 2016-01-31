@@ -20,6 +20,8 @@ public class SoundManager : MonoBehaviour {
 	public AudioClip leafFail;
 	public AudioClip leafSuccess;
 
+	public AudioClip gameStart;
+
 	public AudioClip countdown;
 
 	public GameManager gameManager;
@@ -37,16 +39,16 @@ public class SoundManager : MonoBehaviour {
 			gameManager.GetPlayerById(1).GetComponent<AudioSource>().PlayOneShot(bearGodMode);
 			break;
 		case GameManager.SoundType.moose:
-			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(moosePunches[Random.Range(0, moosePunches.Length)]);
+			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(moosePunches[Random.Range(0, moosePunches.Length)]);
 			break;
 		case GameManager.SoundType.mooseGod:
-			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(mooseGodMode);
+			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(mooseGodMode);
 			break;
 		case GameManager.SoundType.loon:
-			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(loonPunches[Random.Range(0, loonPunches.Length)]);
+			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(loonPunches[Random.Range(0, loonPunches.Length)]);
 			break;
 		case GameManager.SoundType.loonGod:
-			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(loonGodMode);
+			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(loonGodMode);
 			break;
 		case GameManager.SoundType.beaver:
 			gameManager.GetPlayerById(3).GetComponent<AudioSource>().PlayOneShot(beaverPunches[Random.Range(0, beaverPunches.Length)]);
@@ -65,6 +67,9 @@ public class SoundManager : MonoBehaviour {
 			break;
 		case GameManager.SoundType.countDown:
 			this.GetComponent<AudioSource>().PlayOneShot(countdown);
+			break;
+		case GameManager.SoundType.intro:
+			this.GetComponent<AudioSource>().PlayOneShot(gameStart);
 			break;
 		}
 	}

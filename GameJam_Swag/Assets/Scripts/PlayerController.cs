@@ -202,7 +202,25 @@ public class PlayerController : MonoBehaviour {
 					target.localPosition = new Vector3 (0f, -3.4f * throwLine.localScale.y, -10f);
 				}
 			}
+
+			if(leafInArms == null && pState == playerState.Throwing)
+			{
+				pState = playerState.Idle;
+				MapleLeaf brokenLeaf = GetComponentInChildren<MapleLeaf>();
+				brokenLeaf.carrier = null;
+				brokenLeaf.transform.parent = null;
+
+			}
 		}
+	}
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
+		
+		GameObject hitPart = Instantiate (Resources.Load<GameObject> ("Prefabs/hitParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
+		hitPart.transform.parent = this.transform;
+		Destroy (hitPart, 1);
 	}
 
 	public void ThrowLeaf(Vector3 targetPosition=default(Vector3))
@@ -280,13 +298,13 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		}
 
@@ -311,13 +329,13 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		}
 

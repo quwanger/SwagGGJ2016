@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
 		leafNo,
 		leafYes,
 		intro,
-		countDown,
+		countDown
 	};
 
 	// Use this for initialization
