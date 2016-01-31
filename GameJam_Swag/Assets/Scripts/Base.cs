@@ -27,7 +27,7 @@ public class Base : MonoBehaviour {
 			PlayerController player = collider.gameObject.GetComponent<PlayerController> ();
 			if(player.PlayerId == this.playerId)
 			{
-				if(player.pState == PlayerController.playerState.Carrying)
+				if(player.pState == PlayerController.playerState.Carrying || player.pState == PlayerController.playerState.Throwing)
 				{
 					if(player.leafInArms.GetComponent<MapleLeaf>().leafColor == player.activeColor)
 					{
@@ -43,6 +43,11 @@ public class Base : MonoBehaviour {
 						transform.GetChild(0).GetComponent<SpriteRenderer>().color = player.activeColor;
 						transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOn");
 
+						if(player.pState == PlayerController.playerState.Throwing)
+						{
+							player.CancelThrow();
+						}
+
 						// Disable effect in the gem history
 						gems[player.currentGemIndex].GetComponent<Gem>().DeactivateGem();
 						player.currentGemIndex++;
@@ -55,6 +60,7 @@ public class Base : MonoBehaviour {
 						vulnerableGem = player.leafInArms;
 						player.gameManager.spawnManager.leavesOnMap.Remove(player.leafInArms);
 						player.leafInArms.transform.parent = this.transform;
+						player.leafInArms.GetComponent<CircleCollider2D>().isTrigger = false;
 						player.leafInArms.GetComponent<MapleLeaf>().captor = player;
 						player.leafInArms.GetComponent<MapleLeaf>().carrier = null;
 						player.leafInArms = null;

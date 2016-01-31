@@ -31,4 +31,10 @@ public class MapleLeaf : MonoBehaviour {
 
 		//Debug.Log ("(" + this.gameObject.GetComponent<Rigidbody2D> ().velocity.x + ", " + this.gameObject.GetComponent<Rigidbody2D> ().velocity.y + ")");
 	}
+
+	public void ChangeLeafColorRandom()
+	{
+		leafColor = GameObject.Find ("GameManager").GetComponent<SpawnManager> ().possibleColors [Random.Range (0, GameObject.Find ("GameManager").GetComponent<GameManager> ().colorCount)];
+		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
+	}
 }

@@ -112,13 +112,20 @@ public class PlayerController : MonoBehaviour {
 		}
 
 //----- HANDLES PLAYER MOVEMENT
-		if (pState == playerState.Idle) {
-			GamePad.SetVibration(WindowsCheckControllerToVibrate(), 0, 0);
+
+		float tempSpeed = movementSpeed;
+
+		if (pState == playerState.Idle || pState == playerState.Carrying) {
+			GamePad.SetVibration (WindowsCheckControllerToVibrate (), 0, 0);
+		}
+
+		if (pState == playerState.Carrying || pState == playerState.Throwing) {
+			tempSpeed *= 0.9f;
 		}
 
 		if (pState != playerState.Stunned) {
-			movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * movementSpeed;
-			movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * movementSpeed * -1;
+			movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * tempSpeed;
+			movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * tempSpeed * -1;
 
 			//Debug.Log (playerId + " " + Input.GetAxis (("RightTrigger" + playerId).ToString ()));
 
@@ -207,6 +214,18 @@ public class PlayerController : MonoBehaviour {
 		pState = playerState.Idle;
 		punchResetTime = (Time.time + this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchRecharge);
 		
+		throwLine.localScale = new Vector3(throwLine.localScale.x, 0f, throwLine.localScale.z);
+		target.localPosition = new Vector3(0f, 0f, -10f);
+		throwLine.gameObject.SetActive(false);
+		target.gameObject.SetActive(false);
+	}
+
+	public void CancelThrow()
+	{
+		startThrow = false;
+
+		punchResetTime = (Time.time + this.gameObject.transform.GetChild (0).transform.GetChild (0).gameObject.GetComponent<Punch> ().punchRecharge);
+
 		throwLine.localScale = new Vector3(throwLine.localScale.x, 0f, throwLine.localScale.z);
 		target.localPosition = new Vector3(0f, 0f, -10f);
 		throwLine.gameObject.SetActive(false);
