@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 
 	public int colorCount;
 	public int sequenceCount;
+
+	public GameManager gameManager;
 	
 	// For sound
 	public enum SoundType {
@@ -46,11 +48,14 @@ public class GameManager : MonoBehaviour {
 		powerPickup,
 		powerRelease,
 		leafNo,
-		leafYes
+		leafYes,
+		intro
 	};
 
 	// Use this for initialization
 	void Start () {
+		gameManager = GetComponent<GameManager> ();
+
 		// Setup audio listener
 		AudioListener.volume = 1.0f;
 
@@ -131,6 +136,21 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void StartGodMode(PlayerController god){
+		switch (god.PlayerId) {
+		case 1:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
+			break;
+		case 2:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			break;
+		case 3:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			break;
+		case 4:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
+			break;
+		}
+
 		god.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + god.character.ToString() + "_God_Body");
 		god.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + god.character.ToString() + "_God_Head");
 

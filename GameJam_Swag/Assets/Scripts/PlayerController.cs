@@ -203,8 +203,6 @@ public class PlayerController : MonoBehaviour {
 	{
 		startThrow = false;
 
-		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
-
 		Debug.Log (transform.parent);
 		leafInArms.transform.parent = null;
 
