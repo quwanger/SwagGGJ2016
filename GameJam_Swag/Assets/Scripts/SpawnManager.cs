@@ -80,6 +80,7 @@ public class SpawnManager : MonoBehaviour {
 	{
 		Destroy (gameStartMessage);
 		gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
+		gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
 		countdownStart = true;
 		countdownStartTime = Time.time;
 	}

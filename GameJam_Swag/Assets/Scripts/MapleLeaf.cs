@@ -43,6 +43,10 @@ public class MapleLeaf : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
+		GameObject hitPart = Instantiate (Resources.Load<GameObject> ("Prefabs/hitParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
+		hitPart.transform.parent = this.transform;
+		Destroy (hitPart, 1);
+
 		if (isBeingThrown) {
 			if (coll.gameObject.GetComponent<PlayerController> ()) {
 				//gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
