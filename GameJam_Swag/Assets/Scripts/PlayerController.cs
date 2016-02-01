@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour {
 	private float throwStartTime;
 	private float timeBeforeThrowBegins = 0.2f;
 	public float punchResetTime = 0f;
+	public float durationOfFire = 5f;
+
+	public Color normalColor = new Color (1f, 1f, 1f);
+	public Color burntColor = new Color(50f/255f, 50f/255f, 50f/255f);
 
 	public GameObject leafInArms = null;
 
@@ -59,6 +63,9 @@ public class PlayerController : MonoBehaviour {
 	public float movementSpeed = 4f;
 	public float dragConstant = 0.09f;
 
+	public float fireSpeed;
+	public bool onFire = false;
+
 	//For vibration
 	public float vibrationIntensity = 0.0f;
 
@@ -67,6 +74,8 @@ public class PlayerController : MonoBehaviour {
 		gameManager = FindObjectOfType<GameManager> ();
 
 		rb = this.gameObject.GetComponent<Rigidbody2D> ();
+
+		fireSpeed = movementSpeed + 2f;
 
 		playerShadow = transform.FindChild ("Silhouette").GetComponent<SpriteRenderer> ();
 		throwLine = transform.FindChild ("Body").transform.FindChild ("Aim").transform;
@@ -122,7 +131,18 @@ public class PlayerController : MonoBehaviour {
 		if (gameManager.spawnManager.gameHasStarted) {
 //----- HANDLES PLAYER MOVEMENT
 
-			float tempSpeed = movementSpeed;
+			float tempSpeed;
+
+			if (GetComponentInChildren<Fire> () == null && onFire) {
+				onFire = false;
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().color = normalColor;
+				this.transform.GetChild (1).GetComponent<SpriteRenderer> ().color = normalColor;
+			}
+
+			if (onFire)
+				tempSpeed = fireSpeed;
+			else
+				tempSpeed = movementSpeed;
 
 			if (pState == playerState.Idle || pState == playerState.Carrying) {
 				GamePad.SetVibration (WindowsCheckControllerToVibrate (), 0, 0);
@@ -160,7 +180,7 @@ public class PlayerController : MonoBehaviour {
 //----- HANDLES PLAYER ACTION
 			if(!gameManager.inGodMode)
 			{
-				if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f) {
+				if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f || Input.GetButton (("A" + playerId).ToString())) {
 					// Actual vibration
 					GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
 
@@ -221,13 +241,19 @@ public class PlayerController : MonoBehaviour {
 		GameObject hitPart = Instantiate (Resources.Load<GameObject> ("Prefabs/hitParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
 		hitPart.transform.parent = this.transform;
 		Destroy (hitPart, 1);
+
+		if (collision.gameObject.name == "Campfire") {
+			if (!onFire && !gameManager.inGodMode) {
+				SetOnFire ();
+			}
+		}
 	}
 
 	public void ThrowLeaf(Vector3 targetPosition=default(Vector3))
 	{
 		startThrow = false;
 
-		Debug.Log (transform.parent);
+		//Debug.Log (transform.parent);
 		leafInArms.transform.parent = null;
 
 		leafInArms.GetComponent<Collider2D> ().isTrigger = false;
@@ -263,7 +289,7 @@ public class PlayerController : MonoBehaviour {
 	
 	private void Punch()
 	{
-		Debug.Log ("Punch!");
+		//Debug.Log ("Punch!");
 
 		// Set state to punching
 		pState = playerState.Punching;
@@ -315,7 +341,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void Stun()
 	{
-		Debug.Log ("Stunned!");
+		//Debug.Log ("Stunned!");
 	
 		GameObject starPart = Instantiate (Resources.Load<GameObject> ("Prefabs/StarParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
 		starPart.transform.parent = this.transform;
@@ -341,6 +367,20 @@ public class PlayerController : MonoBehaviour {
 
 		stunStartTime = Time.time;
 		leafInArms = null;
+	}
+
+	public void SetOnFire()
+	{
+		onFire = true;
+
+		this.transform.GetChild (0).GetComponent<SpriteRenderer> ().color = burntColor;
+		this.transform.GetChild (1).GetComponent<SpriteRenderer> ().color = burntColor;
+
+		GameObject myfire = Instantiate (Resources.Load<GameObject> ("Prefabs/OnFire")) as GameObject;
+		myfire.transform.parent = this.transform;
+		myfire.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -17f);
+		myfire.transform.localScale = new Vector3 (1f, 1f, 1f);
+		Destroy (myfire, durationOfFire);
 	}
 
 	// To switch between our player indexes to assign vibration

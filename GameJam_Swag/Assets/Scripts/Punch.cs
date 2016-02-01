@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XInputDotNetPure;
 
 public class Punch : MonoBehaviour {
 
@@ -48,38 +49,50 @@ public class Punch : MonoBehaviour {
 		}
 		else if(other.gameObject.GetComponent<MapleLeaf> ())
 		{
-			//pick up maple leaf
-			if(other.gameObject.GetComponent<MapleLeaf>().carrier != null)
-			{
-				if(other.gameObject.GetComponent<MapleLeaf>().carrier.pState == PlayerController.playerState.Throwing)
-				{
-					other.gameObject.GetComponent<MapleLeaf>().carrier.CancelThrow();
+			if (transform.parent.parent.GetComponent<PlayerController> () != other.gameObject.GetComponent<MapleLeaf> ().captor) {
+				//pick up maple leaf
+				if (other.gameObject.GetComponent<MapleLeaf> ().carrier != null) {
+					if (other.gameObject.GetComponent<MapleLeaf> ().carrier.pState == PlayerController.playerState.Throwing) {
+						other.gameObject.GetComponent<MapleLeaf> ().carrier.CancelThrow ();
+					}
+					other.gameObject.GetComponent<MapleLeaf> ().carrier.Stun ();
+					//other.gameObject.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
+				} else if (other.gameObject.GetComponent<MapleLeaf> ().captor != null) {
+					PlayerController tempPlayer = other.gameObject.GetComponent<MapleLeaf> ().captor;
+					tempPlayer.currentGemIndex--;
+					tempPlayer.activeColor = tempPlayer.myColors [tempPlayer.currentGemIndex];
+					tempPlayer.playerShadow.color = tempPlayer.activeColor;
+					transform.parent.parent.GetComponent<PlayerController> ().gameManager.bases [tempPlayer.PlayerId - 1].gems [tempPlayer.currentGemIndex + 1].GetComponent<Gem> ().StolenGem ();
+					transform.parent.parent.GetComponent<PlayerController> ().gameManager.bases [tempPlayer.PlayerId - 1].gems [tempPlayer.currentGemIndex].GetComponent<Gem> ().ReactivateGem ();
+					transform.parent.parent.GetComponent<PlayerController> ().gameManager.bases [tempPlayer.PlayerId - 1].vulnerableGem = null;
+					//Debug.Log ("Who's base? " + tempPlayer.character.ToString() + " , What base? " + transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId].playerId);
+					GameObject.Find ("GameManager").GetComponent<SpawnManager> ().leavesOnMap.Add (other.gameObject);
+					other.gameObject.GetComponent<MapleLeaf> ().captor = null;
 				}
-				other.gameObject.GetComponent<MapleLeaf>().carrier.Stun();
-				//other.gameObject.GetComponent<MapleLeaf>().ChangeLeafColorRandom();
+				other.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);
+				other.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
+				other.gameObject.GetComponent<Collider2D> ().isTrigger = true;
+				other.gameObject.transform.parent = this.transform.parent;
+				other.gameObject.transform.position = this.transform.position;
+				other.gameObject.GetComponent<MapleLeaf> ().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
+				this.transform.parent.transform.parent.GetComponent<PlayerController> ().leafInArms = other.gameObject;
+				EndPunch (false);
+			} else {
+				//TRYING TO PICK UP YOUR OWN CAPTURED LEAF
+				SpawnAlert();
+				//Debug.Log("That's your leaf!");
 			}
-			else if(other.gameObject.GetComponent<MapleLeaf>().captor != null)
-			{
-				PlayerController tempPlayer = other.gameObject.GetComponent<MapleLeaf>().captor;
-				tempPlayer.currentGemIndex--;
-				tempPlayer.activeColor = tempPlayer.myColors[tempPlayer.currentGemIndex];
-				tempPlayer.playerShadow.color = tempPlayer.activeColor;
-				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex+1].GetComponent<Gem>().StolenGem();
-				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].gems[tempPlayer.currentGemIndex].GetComponent<Gem>().ReactivateGem();
-				transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId-1].vulnerableGem = null;
-				//Debug.Log ("Who's base? " + tempPlayer.character.ToString() + " , What base? " + transform.parent.parent.GetComponent<PlayerController>().gameManager.bases[tempPlayer.PlayerId].playerId);
-				GameObject.Find("GameManager").GetComponent<SpawnManager>().leavesOnMap.Add(other.gameObject);
-				other.gameObject.GetComponent<MapleLeaf>().captor = null;
-			}
-			other.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-			other.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
-			other.gameObject.GetComponent<Collider2D>().isTrigger = true;
-			other.gameObject.transform.parent = this.transform.parent;
-			other.gameObject.transform.position = this.transform.position;
-			other.gameObject.GetComponent<MapleLeaf>().carrier = this.transform.parent.transform.parent.GetComponent<PlayerController> ();
-			this.transform.parent.transform.parent.GetComponent<PlayerController> ().leafInArms = other.gameObject;
-			EndPunch(false);
 		}
+	}
+
+	private void SpawnAlert()
+	{
+		GameObject alert = Instantiate(Resources.Load<GameObject>("Prefabs/Alert")) as GameObject;
+		alert.transform.parent = transform.parent.parent.transform;
+		alert.transform.position = new Vector3 (transform.parent.parent.position.x, transform.parent.parent.position.y + 0.3f, -25f);
+		alert.transform.eulerAngles = new Vector3 (0f, 0f, 0f);
+		Destroy (alert, 0.75f);
+		GamePad.SetVibration (transform.parent.parent.GetComponent<PlayerController> ().WindowsCheckControllerToVibrate (), transform.parent.parent.GetComponent<PlayerController> ().vibrationIntensity, transform.parent.parent.GetComponent<PlayerController> ().vibrationIntensity);
 	}
 
 	private void EndPunch(bool toIdle)

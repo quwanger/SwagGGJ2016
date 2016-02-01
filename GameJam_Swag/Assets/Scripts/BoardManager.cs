@@ -30,7 +30,7 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void Start() {
-		Debug.Log ("DFDFDF");
+		//Debug.Log ("DFDFDF");
 	}
 
 	// Setup outer wall and floor

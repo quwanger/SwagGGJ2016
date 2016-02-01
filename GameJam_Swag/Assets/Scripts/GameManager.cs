@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 
 	public const int totalColors = 7;
 	public const int minColors = 2;
-	public const int maxSequence = 8;
+	public const int maxSequence = 7;
 	public const int minSequence = 3;
 
 	private float godModeDuration = 10.0f;
@@ -86,9 +86,9 @@ public class GameManager : MonoBehaviour {
 		InitializeGemConfiguration ();
 
 		// Activate the game
-		foreach (PlayerController activePlayer in activePlayers) {
+		/*foreach (PlayerController activePlayer in activePlayers) {
 			activePlayer.StartRound();
-		}
+		}*/
 
 		spawnManager.Initiate ();
 	}
@@ -123,14 +123,15 @@ public class GameManager : MonoBehaviour {
 		spawnManager.possibleColors [6] = new Color (255f/255f, 146f/255f, 0f/255f);
 		
 		colorCount = Random.Range (minColors, (totalColors+1));
-		Debug.Log ("Color Count: " + colorCount);
+		//Debug.Log ("Color Count: " + colorCount);
 		sequenceCount = Random.Range (minSequence, maxSequence);
+		//Debug.Log ("Sequence Count: " + colorCount);
 	}
 
 	public void DeclareWinner(PlayerController winner)
 	{
 		currentGod = winner;
-		Debug.Log (winner.character.ToString() + " has won!");
+		//Debug.Log (winner.character.ToString() + " has won!");
 
 		gameEndTitle = Instantiate(Resources.Load<GameObject>("Prefabs/GameStart"), new Vector3(0f, 1.5f, -18f), Quaternion.identity) as GameObject;
 		gameEndTitle.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_yearofthe" + Random.Range(1,3).ToString()) as Sprite;
@@ -207,6 +208,13 @@ public class GameManager : MonoBehaviour {
 				pc.CancelThrow();
 			pc.pState = PlayerController.playerState.Idle;
 			pc.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector3(0,0,0);
+		}
+
+		foreach(Base b in bases)
+		{
+			foreach (GameObject gem in b.gameObject.GetComponent<Base>().gems) {
+				gem.SetActive (false);
+			}
 		}
 
 		Camera.main.transform.position = new Vector3(0, 0, -10f);

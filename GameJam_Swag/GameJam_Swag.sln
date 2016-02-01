@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{3F64C741-ABC9-C80A-FF62-3CF9C9B886B6}") = "GameJam_Swag", "Assembly-CSharp-firstpass.csproj", "{7DB75A14-E2B0-F838-C7C2-2FF361A452CC}"
+EndProject
 Project("{3F64C741-ABC9-C80A-FF62-3CF9C9B886B6}") = "GameJam_Swag", "Assembly-CSharp.csproj", "{691A4F95-D6DB-DB84-BB5A-A8C740D7BE51}"
 EndProject
 Global
@@ -9,6 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DB75A14-E2B0-F838-C7C2-2FF361A452CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DB75A14-E2B0-F838-C7C2-2FF361A452CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DB75A14-E2B0-F838-C7C2-2FF361A452CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DB75A14-E2B0-F838-C7C2-2FF361A452CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{691A4F95-D6DB-DB84-BB5A-A8C740D7BE51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{691A4F95-D6DB-DB84-BB5A-A8C740D7BE51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{691A4F95-D6DB-DB84-BB5A-A8C740D7BE51}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour {
 		for (int i=0; i<activePlayers.Length; i++) {
 			if (Input.GetButtonDown (("Start" + (i+1)).ToString()) && !activePlayers [i]) {
 				activePlayers [i] = true;
-				Debug.Log ("START PLAYER " + (i+1));
+				//Debug.Log ("START PLAYER " + (i+1));
 				GameObject newPlayer = Instantiate (playerObject, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
 				newPlayer.GetComponent<PlayerController> ().PlayerId = (i+1);
 				newPlayer.GetComponent<PlayerController> ().myBase = this.gameObject.GetComponent<GameManager>().bases[i];
@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour {
 					}
 				}
 
-				Debug.Log ("KILL PLAYER " + (i+1));
+				//Debug.Log ("KILL PLAYER " + (i+1));
 				Destroy (playerGameObjects [i]);
 
 			}

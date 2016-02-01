@@ -23,6 +23,8 @@ public class SpawnManager : MonoBehaviour {
 	private GameObject gameCountdown02 = null;
 	private GameObject gameCountdown03 = null;
 
+	private int minimumNumberOfPlayers = 1;
+
 	// Use this for initialization
 	void Start () {
 		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
@@ -77,7 +79,7 @@ public class SpawnManager : MonoBehaviour {
 			}
 		}
 
-		if (gameManager.activePlayers.Count < 2 && countdownStart) {
+		if (gameManager.activePlayers.Count < minimumNumberOfPlayers && countdownStart) {
 			CancelCountdown();	
 		}
 	}
@@ -85,7 +87,7 @@ public class SpawnManager : MonoBehaviour {
 	// Start game if there's more than 1 player
 	public void CheckStart()
 	{
-		if (gameManager.activePlayers.Count > 1 && !countdownStart) {
+		if (gameManager.activePlayers.Count >= minimumNumberOfPlayers && !countdownStart) {
 			StartCountdown();
 		}
 	}
@@ -110,7 +112,7 @@ public class SpawnManager : MonoBehaviour {
 
 		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
 		if (!gameHasStarted) {
-			Debug.Log ("PLAYING SOUND");
+			//Debug.Log ("PLAYING SOUND");
 			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
 		}
 
@@ -122,7 +124,7 @@ public class SpawnManager : MonoBehaviour {
 	{
 		gameHasStarted = true;
 
-		Debug.Log ("GAME HAS STARTED");
+		//Debug.Log ("GAME HAS STARTED");
 
 		foreach (PlayerController player in gameManager.activePlayers) {
 			player.StartRound();
@@ -171,7 +173,7 @@ public class SpawnManager : MonoBehaviour {
 		}
 
 		if(validSpawnPoints.Count < 1) {
-			Debug.Log("All Spawn points are currently crowded");
+			//Debug.Log("All Spawn points are currently crowded");
 			return;
 		}
 
