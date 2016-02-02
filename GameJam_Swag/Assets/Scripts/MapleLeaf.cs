@@ -11,6 +11,9 @@ public class MapleLeaf : MonoBehaviour {
 
 	public GameManager gameManager;
 
+	private int checkDelay = 0;
+	private int checkDelayMax = 3;
+
 	// Use this for initialization
 	void Start () {
 		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
@@ -26,14 +29,18 @@ public class MapleLeaf : MonoBehaviour {
 
 			this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
 
-			float tempMag = this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude;
+			if (checkDelay >= checkDelayMax) {
+				float tempMag = this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude;
 
-			if(tempMag < 1f && tempMag != 0)
-			{
-				this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
-				isBeingThrown = false;
-				this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(0, 0);
-				thrower = null;
+				if (tempMag < 1f) {
+					this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
+					isBeingThrown = false;
+					this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);
+					thrower = null;
+					checkDelay = 0;
+				}
+			} else {
+				checkDelay++;
 			}
 		}
 

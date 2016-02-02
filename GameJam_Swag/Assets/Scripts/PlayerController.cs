@@ -261,6 +261,7 @@ public class PlayerController : MonoBehaviour {
 		if (targetPosition != default(Vector3)) {
 			//leafInArms.transform.position = targetPosition;
 			leafInArms.GetComponent<Rigidbody2D> ().isKinematic = false;
+			//applies a force to the leaf in the direction the player is aiming, the longer they hold down aim, the faster it goes
 			leafInArms.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (targetPosition.x - transform.position.x, targetPosition.y - transform.position.y).normalized * (200f * throwLine.localScale.y));
 			leafInArms.GetComponent<MapleLeaf> ().isBeingThrown = true;
 			leafInArms.GetComponent<MapleLeaf>().thrower = this;
