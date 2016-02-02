@@ -42,8 +42,8 @@ public class Base : MonoBehaviour {
 							//score!
 							//Debug.Log ("Score!");
 							// Set the big leaf to the active color
-							transform.GetChild (0).GetComponent<SpriteRenderer> ().color = player.activeColor;
-							transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemBaseOn");
+							//transform.GetChild (0).GetComponent<SpriteRenderer> ().color = player.activeColor;
+							//transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/GemBaseOn");
 
 							//check is this player only needs 1 more to win
 							if (player.currentGemIndex == (gameManager.sequenceCount - 2)) {
@@ -53,8 +53,8 @@ public class Base : MonoBehaviour {
 								gettingCloseCharacter = Instantiate (Resources.Load<GameObject> ("Prefabs/GameStart"), new Vector3 (0f, -1.5f, -18f), Quaternion.identity) as GameObject;
 								gettingCloseCharacter.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/text_" + player.character.ToString () + Random.Range (1, 3).ToString ()) as Sprite;
 
-								Destroy (gettingCloseTitle, 0.5f);
-								Destroy (gettingCloseCharacter, 0.5f);
+								Destroy (gettingCloseTitle, 0.75f);
+								Destroy (gettingCloseCharacter, 0.75f);
 							}
 
 							// Disable effect in the gem history
@@ -123,8 +123,15 @@ public class Base : MonoBehaviour {
 
 	public void resetBase() {
 		// Reset gems to default 
-		transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOff");
-		transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(255,255,255);
+		//transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GemBaseOff");
+		//transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(255,255,255);
+		//transform.GetChild(0).gameObject.SetActive(true);
+
+		if (vulnerableGem != null) {
+			vulnerableGem.GetComponent<MapleLeaf> ().captor = null;
+			vulnerableGem = null;
+		}
+
 		// To be safe, lets deactivate all gems
 		for(int i = 0; i < gems.Count; i++) {
 			gems[i].GetComponent<Gem> ().ResetGem ();

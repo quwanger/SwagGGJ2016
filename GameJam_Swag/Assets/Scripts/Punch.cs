@@ -87,6 +87,7 @@ public class Punch : MonoBehaviour {
 
 	private void SpawnAlert()
 	{
+		transform.parent.parent.GetComponent<PlayerController>().gameManager.soundManager.PlaySound (GameManager.SoundType.leafNo);
 		GameObject alert = Instantiate(Resources.Load<GameObject>("Prefabs/Alert")) as GameObject;
 		alert.transform.parent = transform.parent.parent.transform;
 		alert.transform.position = new Vector3 (transform.parent.parent.position.x, transform.parent.parent.position.y + 0.3f, -25f);

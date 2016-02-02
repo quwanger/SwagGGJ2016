@@ -373,6 +373,22 @@ public class PlayerController : MonoBehaviour {
 	{
 		onFire = true;
 
+		// Play correct sound for correct player
+		switch (playerId) {
+		case 1:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
+			break;
+		case 2:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			break;
+		case 3:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
+			break;
+		case 4:
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			break;
+		}
+
 		this.transform.GetChild (0).GetComponent<SpriteRenderer> ().color = burntColor;
 		this.transform.GetChild (1).GetComponent<SpriteRenderer> ().color = burntColor;
 

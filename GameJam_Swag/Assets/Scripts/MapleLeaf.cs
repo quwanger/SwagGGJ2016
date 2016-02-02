@@ -52,14 +52,15 @@ public class MapleLeaf : MonoBehaviour {
 				//gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
 				PlayerController tempPlayer = coll.gameObject.GetComponent<PlayerController> ();
-				if (tempPlayer.pState != PlayerController.playerState.Stunned) {
-					if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying)
-					{
-						tempPlayer.ThrowLeaf(default(Vector3));
+				if (tempPlayer != thrower) {
+					if (tempPlayer.pState != PlayerController.playerState.Stunned) {
+						if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying) {
+							tempPlayer.ThrowLeaf (default(Vector3));
+						}
+						tempPlayer.Stun ();
 					}
-					tempPlayer.Stun ();
+					ChangeLeafColor (thrower.activeColor);
 				}
-				ChangeLeafColor(thrower.activeColor);
 			}else if (coll.gameObject.GetComponent<MapleLeaf> ()) {
 				if(coll.gameObject.GetComponent<MapleLeaf>().carrier != null)
 				{

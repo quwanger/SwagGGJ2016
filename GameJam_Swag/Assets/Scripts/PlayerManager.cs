@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour {
 				newPlayer.GetComponent<PlayerController> ().PlayerId = (i+1);
 				newPlayer.GetComponent<PlayerController> ().myBase = this.gameObject.GetComponent<GameManager>().bases[i];
 				newPlayer.transform.position = newPlayer.GetComponent<PlayerController> ().myBase.transform.position;
+				newPlayer.GetComponent<PlayerController> ().myBase.transform.GetChild (0).gameObject.SetActive (false);
 				switch(i){
 				case 0:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
@@ -68,6 +69,7 @@ public class PlayerManager : MonoBehaviour {
 				foreach (PlayerController pc in gameManager.activePlayers) {
 					// If the type of the deleted character is in the list of active characters, remove it from active characters
 					if(pc.character == playerGameObjects [i].GetComponent<PlayerController>().character) {
+						pc.myBase.transform.GetChild (0).gameObject.SetActive (true);
 						pc.myBase.resetBase();
 						gameManager.activePlayers.Remove(pc);
 						break;
