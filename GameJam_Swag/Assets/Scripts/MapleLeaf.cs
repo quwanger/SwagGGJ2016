@@ -29,15 +29,12 @@ public class MapleLeaf : MonoBehaviour {
 
 			this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
 
+			//check delday implemented to avoid the immediate stop bug
 			if (checkDelay >= checkDelayMax) {
 				float tempMag = this.gameObject.GetComponent<Rigidbody2D> ().velocity.magnitude;
 
 				if (tempMag < 1f) {
-					this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
-					isBeingThrown = false;
-					this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);
-					thrower = null;
-					checkDelay = 0;
+					StopLeaf ();
 				}
 			} else {
 				checkDelay++;
@@ -95,5 +92,14 @@ public class MapleLeaf : MonoBehaviour {
 	{
 		leafColor = color;
 		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
+	}
+
+	public void StopLeaf()
+	{
+		this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
+		isBeingThrown = false;
+		this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);
+		thrower = null;
+		checkDelay = 0;
 	}
 }

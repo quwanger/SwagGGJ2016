@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> maps = new List<GameObject>();
 	public Camera mainCamera;
 
+	public bool throwToScore = true;
+
 	public const int totalColors = 7;
 	public const int minColors = 2;
 	public const int maxSequence = 7;
@@ -96,20 +98,26 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (inGodMode) {
-			Camera.main.GetComponent<CameraShake>().Shake();
+			Camera.main.GetComponent<CameraShake> ().Shake ();
 
-			float tempScale = Mathf.Lerp(currentGod.transform.localScale.x, godScale, Time.deltaTime);
+			float tempScale = Mathf.Lerp (currentGod.transform.localScale.x, godScale, Time.deltaTime);
 			currentGod.transform.localScale = new Vector3 (tempScale, tempScale, 1f);
 
-			if(Time.time > (godModeStartTime + godModeDuration))
-			{
-				currentGod.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + currentGod.character.ToString() + "_Body");
-				currentGod.gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/" + currentGod.character.ToString() + "_Head");
-				currentGod.gameObject.transform.localScale = new Vector3(0.267742f, 0.267742f, 1f);
+			if (Time.time > (godModeStartTime + godModeDuration)) {
+				currentGod.gameObject.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/" + currentGod.character.ToString () + "_Body");
+				currentGod.gameObject.transform.GetChild (1).GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/" + currentGod.character.ToString () + "_Head");
+				currentGod.gameObject.transform.localScale = new Vector3 (0.267742f, 0.267742f, 1f);
 				inGodMode = false;
 				currentGod = null;
-				ResetRound();
+				ResetRound ();
 			}
+		} else if(activePlayers.Count < spawnManager.minimumNumberOfPlayers && spawnManager.gameHasStarted){
+			ResetRound ();
+		}
+
+		//toggle the ability to throw to score using T
+		if (Input.GetKeyDown (KeyCode.T)) {
+			throwToScore = !throwToScore;
 		}
 	}
 
@@ -223,7 +231,10 @@ public class GameManager : MonoBehaviour {
 		// Set the game to finished
 		spawnManager.gameHasStarted = false;
 		spawnManager.countdownStart = false;
-		spawnManager.StartCountdown ();
+
+		if (activePlayers.Count > spawnManager.minimumNumberOfPlayers) {
+			spawnManager.StartCountdown ();
+		}
 
 		Initiate();
 	}

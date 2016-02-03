@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour {
 	private GameObject gameCountdown02 = null;
 	private GameObject gameCountdown03 = null;
 
-	private int minimumNumberOfPlayers = 1;
+	public int minimumNumberOfPlayers = 1;
 
 	// Use this for initialization
 	void Start () {
