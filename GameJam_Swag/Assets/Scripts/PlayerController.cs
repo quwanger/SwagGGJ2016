@@ -329,13 +329,13 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		}
 
@@ -360,13 +360,13 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		}
 
@@ -384,13 +384,13 @@ public class PlayerController : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bearFire);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loonFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseFire);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverFire);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonFire);
 			break;
 		}
 

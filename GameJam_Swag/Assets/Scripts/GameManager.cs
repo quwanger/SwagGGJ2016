@@ -166,13 +166,13 @@ public class GameManager : MonoBehaviour {
 			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
 			break;
 		case 3:
 			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
 			break;
 		}
 
