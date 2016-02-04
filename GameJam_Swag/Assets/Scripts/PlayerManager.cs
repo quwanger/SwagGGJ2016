@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -35,7 +36,8 @@ public class PlayerManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		for (int i=0; i<activePlayers.Length; i++) {
-			if (Input.GetButtonDown (("Start" + (i+1)).ToString()) && !activePlayers [i]) {
+			//if (Input.GetButtonDown (("Start_" + (i+1)).ToString()) && !activePlayers [i]) {
+			if (GamePad.GetState(WindowsCheckController(i+1)).Buttons.Start == ButtonState.Pressed && !activePlayers [i]) {
 				activePlayers [i] = true;
 				//Debug.Log ("START PLAYER " + (i+1));
 				GameObject newPlayer = Instantiate (playerObject, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
@@ -63,7 +65,8 @@ public class PlayerManager : MonoBehaviour {
 				newPlayer.GetComponent<PlayerController>().playerManager = this;
 				playerGameObjects [i] = newPlayer;
 				//this.gameObject.GetComponent<SpawnManager>().CheckStart();
-			} else if (Input.GetButtonDown (("Select" + (i+1)).ToString()) && activePlayers [i]) {
+			//} else if (Input.GetButtonDown (("Back_" + (i+1)).ToString()) && activePlayers [i]) {
+			} else if (GamePad.GetState(WindowsCheckController(i+1)).Buttons.Back == ButtonState.Pressed && activePlayers [i]) {
 				activePlayers [i] = false;
 
 				foreach (PlayerController pc in gameManager.activePlayers) {
@@ -80,6 +83,22 @@ public class PlayerManager : MonoBehaviour {
 				Destroy (playerGameObjects [i]);
 
 			}
+		}
+	}
+
+	// To switch between our player indexes to assign vibration
+	public XInputDotNetPure.PlayerIndex WindowsCheckController(int i) {
+		switch (i) {
+		case(1):
+			return PlayerIndex.One;
+		case(2):
+			return PlayerIndex.Two;
+		case(3):
+			return PlayerIndex.Three;
+		case(4):
+			return PlayerIndex.Four;
+		default:
+			return PlayerIndex.One;
 		}
 	}
 }

@@ -153,8 +153,11 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if (pState != playerState.Stunned) {
-				movementVector.x = Input.GetAxis (("LeftJoystickX" + playerId).ToString ()) * tempSpeed;
-				movementVector.y = Input.GetAxis (("LeftJoystickY" + playerId).ToString ()) * tempSpeed * -1;
+				//movementVector.x = Input.GetAxis (("L_XAxis_" + playerId).ToString ()) * tempSpeed;
+				//movementVector.y = Input.GetAxis (("L_YAxis_" + playerId).ToString ()) * tempSpeed * -1;
+
+				movementVector.x = GamePad.GetState (WindowsCheckControllerToVibrate ()).ThumbSticks.Left.X * tempSpeed;
+				movementVector.y = GamePad.GetState (WindowsCheckControllerToVibrate ()).ThumbSticks.Left.Y * tempSpeed;
 
 				//Debug.Log (playerId + " " + Input.GetAxis (("RightTrigger" + playerId).ToString ()));
 
@@ -180,7 +183,8 @@ public class PlayerController : MonoBehaviour {
 //----- HANDLES PLAYER ACTION
 			if(!gameManager.inGodMode)
 			{
-				if (Input.GetAxis (("RightTrigger" + playerId).ToString ()) > 0f || Input.GetButton (("A" + playerId).ToString())) {
+				//if (Input.GetAxis (("TriggersR_" + playerId).ToString ()) > 0f || Input.GetButton (("A_" + playerId).ToString())) {
+				if (GamePad.GetState(WindowsCheckControllerToVibrate()).Triggers.Right > 0f || GamePad.GetState(WindowsCheckControllerToVibrate()).Buttons.A == ButtonState.Pressed) {
 					// Actual vibration
 					GamePad.SetVibration (WindowsCheckControllerToVibrate (), vibrationIntensity, vibrationIntensity);
 
