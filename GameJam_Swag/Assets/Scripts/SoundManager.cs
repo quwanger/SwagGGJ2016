@@ -12,6 +12,11 @@ public class SoundManager : MonoBehaviour {
 	public AudioClip loonGodMode;
 	public AudioClip beaverGodMode;
 
+	public AudioClip bearFireMode;
+	public AudioClip mooseFireMode;
+	public AudioClip loonFireMode;
+	public AudioClip beaverFireMode;
+
 	public AudioClip grabNoise;
 	public AudioClip throwPull;
 	public AudioClip throwRelease;
@@ -38,11 +43,17 @@ public class SoundManager : MonoBehaviour {
 		case GameManager.SoundType.bearGod:
 			gameManager.GetPlayerById(1).GetComponent<AudioSource>().PlayOneShot(bearGodMode);
 			break;
+		case GameManager.SoundType.bearFire:
+			gameManager.GetPlayerById(1).GetComponent<AudioSource>().PlayOneShot(bearFireMode);
+			break;
 		case GameManager.SoundType.moose:
 			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(moosePunches[Random.Range(0, moosePunches.Length)]);
 			break;
 		case GameManager.SoundType.mooseGod:
 			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(mooseGodMode);
+			break;
+		case GameManager.SoundType.mooseFire:
+			gameManager.GetPlayerById(4).GetComponent<AudioSource>().PlayOneShot(mooseFireMode);
 			break;
 		case GameManager.SoundType.loon:
 			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(loonPunches[Random.Range(0, loonPunches.Length)]);
@@ -50,11 +61,17 @@ public class SoundManager : MonoBehaviour {
 		case GameManager.SoundType.loonGod:
 			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(loonGodMode);
 			break;
+		case GameManager.SoundType.loonFire:
+			gameManager.GetPlayerById(2).GetComponent<AudioSource>().PlayOneShot(loonFireMode);
+			break;
 		case GameManager.SoundType.beaver:
 			gameManager.GetPlayerById(3).GetComponent<AudioSource>().PlayOneShot(beaverPunches[Random.Range(0, beaverPunches.Length)]);
 			break;
 		case GameManager.SoundType.beaverGod:
 			gameManager.GetPlayerById(3).GetComponent<AudioSource>().PlayOneShot(beaverGodMode);
+			break;
+		case GameManager.SoundType.beaverFire:
+			gameManager.GetPlayerById(3).GetComponent<AudioSource>().PlayOneShot(beaverFireMode);
 			break;
 		case GameManager.SoundType.grab:
 			this.GetComponent<AudioSource>().PlayOneShot(grabNoise);

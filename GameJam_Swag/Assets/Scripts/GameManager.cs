@@ -39,12 +39,16 @@ public class GameManager : MonoBehaviour {
 	public enum SoundType {
 		bear,
 		bearGod,
+		bearFire,
 		moose,
 		mooseGod,
+		mooseFire,
 		loon,
 		loonGod,
+		loonFire,
 		beaver,
 		beaverGod,
+		beaverFire,
 		grab,
 		throwStart,
 		throwEnd,
@@ -118,6 +122,10 @@ public class GameManager : MonoBehaviour {
 		//toggle the ability to throw to score using T
 		if (Input.GetKeyDown (KeyCode.T)) {
 			throwToScore = !throwToScore;
+		}
+
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.Quit();
 		}
 	}
 

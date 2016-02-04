@@ -3,12 +3,12 @@ using System.Collections;
 
 public class CameraZoom : MonoBehaviour {
 
-	private float defaultSize;
+	public float defaultSize;
 	private bool followTarget = false;
 	private bool zoomIn = false;
 	public GameObject character;
 	public Vector3 originalCameraPosition;
-	private float targetSize = 3.5f;
+	public float targetSize = 3.5f;
 
 	void Start () {
 		defaultSize = Camera.main.orthographicSize;

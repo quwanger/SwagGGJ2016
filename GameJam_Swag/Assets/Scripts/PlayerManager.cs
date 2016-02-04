@@ -42,7 +42,15 @@ public class PlayerManager : MonoBehaviour {
 				//Debug.Log ("START PLAYER " + (i+1));
 				GameObject newPlayer = Instantiate (playerObject, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
 				newPlayer.GetComponent<PlayerController> ().PlayerId = (i+1);
-				newPlayer.GetComponent<PlayerController> ().myBase = this.gameObject.GetComponent<GameManager>().bases[i];
+				foreach(Base b in gameManager.bases)
+				{
+					if(b.playerId == newPlayer.GetComponent<PlayerController> ().PlayerId)
+					{
+						newPlayer.GetComponent<PlayerController> ().myBase = b;
+						break;
+					}
+				}
+				
 				newPlayer.transform.position = newPlayer.GetComponent<PlayerController> ().myBase.transform.position;
 				newPlayer.GetComponent<PlayerController> ().myBase.transform.GetChild (0).gameObject.SetActive (false);
 				switch(i){
@@ -50,13 +58,13 @@ public class PlayerManager : MonoBehaviour {
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;
 					break;
 				case 1:
-					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Loon;
+					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Moose;
 					break;
 				case 2:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Beaver;
 					break;
 				case 3:
-					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Moose;
+					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Loon;
 					break;
 				default:
 					newPlayer.GetComponent<PlayerController>().character = PlayerCharacter.Bear;

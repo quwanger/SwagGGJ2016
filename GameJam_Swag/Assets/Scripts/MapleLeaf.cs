@@ -9,6 +9,11 @@ public class MapleLeaf : MonoBehaviour {
 	public PlayerController captor;
 	public PlayerController thrower;
 
+	public int bounceCount = 0;
+
+	private const float zoomConstant = 7f;
+	private bool cameraZooming = false;
+
 	public GameManager gameManager;
 
 	private int checkDelay = 0;
@@ -26,6 +31,18 @@ public class MapleLeaf : MonoBehaviour {
 		if (isBeingThrown) {
 			float velX = Mathf.Lerp(this.gameObject.GetComponent<Rigidbody2D> ().velocity.x, 0, Time.deltaTime);
 			float velY = Mathf.Lerp(this.gameObject.GetComponent<Rigidbody2D> ().velocity.y, 0, Time.deltaTime);
+
+			/*if(!cameraZooming)
+			{
+				foreach (PlayerController player in gameManager.activePlayers) {
+					if(Vector3.Distance(this.gameObject.transform.position, player.gameObject.transform.position) < zoomConstant && thrower != player)
+					{
+						cameraZooming = true;
+						Camera.main.GetComponent<CameraZoom>().ZoomIn(this.gameObject);
+						break;
+					}
+				}
+			}*/
 
 			this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
 
@@ -52,18 +69,28 @@ public class MapleLeaf : MonoBehaviour {
 		Destroy (hitPart, 1);
 
 		if (isBeingThrown) {
+			
+			bounceCount++;
+
+			this.GetComponent<AudioSource>().pitch += (bounceCount*0.2f);
+			this.GetComponent<AudioSource>().Play();
+
 			if (coll.gameObject.GetComponent<PlayerController> ()) {
 				//gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 
 				PlayerController tempPlayer = coll.gameObject.GetComponent<PlayerController> ();
-				if (tempPlayer != thrower) {
-					if (tempPlayer.pState != PlayerController.playerState.Stunned) {
-						if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying) {
-							tempPlayer.ThrowLeaf (default(Vector3));
-						}
-						tempPlayer.Stun ();
+				if (tempPlayer.pState != PlayerController.playerState.Stunned) {
+					if (tempPlayer.pState == PlayerController.playerState.Throwing || tempPlayer.pState == PlayerController.playerState.Carrying) {
+						tempPlayer.ThrowLeaf (default(Vector3));
 					}
-					ChangeLeafColor (thrower.activeColor);
+					tempPlayer.Stun ();
+
+					if (tempPlayer != thrower) {
+						ChangeLeafColor (thrower.activeColor);
+					}else
+					{
+						//you hit yourself with a ricoche'd leaf
+					}
 				}
 			}else if (coll.gameObject.GetComponent<MapleLeaf> ()) {
 				if(coll.gameObject.GetComponent<MapleLeaf>().carrier != null)
@@ -75,8 +102,14 @@ public class MapleLeaf : MonoBehaviour {
 							tempPlayer.ThrowLeaf(default(Vector3));
 						}
 						tempPlayer.Stun ();
+
+						if (tempPlayer != thrower) {
+							ChangeLeafColor(thrower.activeColor);
+						}else
+						{
+							//you hit yourself with a ricoche'd leaf
+						}
 					}
-					ChangeLeafColor(thrower.activeColor);
 				}
 			}
 		}
@@ -96,6 +129,9 @@ public class MapleLeaf : MonoBehaviour {
 
 	public void StopLeaf()
 	{
+		bounceCount = 0;
+		cameraZooming = false;
+		this.GetComponent<AudioSource>().pitch = 1f;
 		this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
 		isBeingThrown = false;
 		this.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);

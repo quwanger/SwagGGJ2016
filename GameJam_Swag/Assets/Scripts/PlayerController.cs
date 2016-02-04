@@ -381,16 +381,16 @@ public class PlayerController : MonoBehaviour {
 		// Play correct sound for correct player
 		switch (playerId) {
 		case 1:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bearFire);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonFire);
 			break;
 		case 3:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverFire);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseFire);
 			break;
 		}
 
