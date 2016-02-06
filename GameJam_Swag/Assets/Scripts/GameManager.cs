@@ -4,74 +4,50 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+    // References to other scripts/prefabs
 	public PlayerManager playerManager;
 	public SpawnManager spawnManager;
 	public SoundManager soundManager;
-	public List<PlayerController> activePlayers = new List<PlayerController>();
+    public Camera mainCamera;
+
+    // Collectors
+    public List<PlayerController> activePlayers = new List<PlayerController>();
 	public List<Base> bases = new List<Base>();
 	public List<GameObject> maps = new List<GameObject>();
-	public Camera mainCamera;
 
-	public bool throwToScore = true;
-
+    // Leaf colours and number of steps
 	public const int totalColors = 7;
 	public const int minColors = 2;
 	public const int maxSequence = 7;
 	public const int minSequence = 3;
+    public int colorCount;
+    public int sequenceCount;
 
-	private float godModeDuration = 10.0f;
+    // God mode
+    private float godModeDuration = 10.0f;
 	private float godModeStartTime;
 	public bool inGodMode = false;
 	private PlayerController currentGod;
 	private float godScale = 3.0f;
 	private Vector3 originalScale = new Vector3(0.267742f, 0.267742f, 0.267742f);
-	private GameObject currentMap;
 
+    // Game states
+    private GameObject currentMap;
 	private GameObject gameEndMessage = null;
 	private GameObject gameEndTitle = null;
 
-	public int colorCount;
-	public int sequenceCount;
-
-	public GameManager gameManager;
-	
-	// For sound
-	public enum SoundType {
-		bear,
-		bearGod,
-		bearFire,
-		moose,
-		mooseGod,
-		mooseFire,
-		loon,
-		loonGod,
-		loonFire,
-		beaver,
-		beaverGod,
-		beaverFire,
-		grab,
-		throwStart,
-		throwEnd,
-		powerPickup,
-		powerRelease,
-		leafNo,
-		leafYes,
-		intro,
-		countDown
-	};
+    public bool throwToScore = true; // Should this not be in playerController or Manager?
 
 	// Use this for initialization
 	void Start () {
-		gameManager = GetComponent<GameManager> ();
-
 		// Setup audio listener
 		AudioListener.volume = 1.0f;
 
 		//Initalize our game objects
 		mainCamera = FindObjectOfType<Camera> ();
-		playerManager = this.gameObject.GetComponent<PlayerManager>();
-		spawnManager = this.gameObject.GetComponent<SpawnManager>();
-		soundManager = this.GetComponent<SoundManager>();
+		playerManager = gameObject.GetComponent<PlayerManager>();
+		spawnManager = gameObject.GetComponent<SpawnManager>();
+		soundManager = GetComponent<SoundManager>();
 
 		Initiate ();
 	}
@@ -119,8 +95,8 @@ public class GameManager : MonoBehaviour {
 			ResetRound ();
 		}
 
-		//toggle the ability to throw to score using T
-		if (Input.GetKeyDown (KeyCode.T)) {
+        //toggle the ability to throw to score using T. Should this not be in playerController or Manager?
+        if (Input.GetKeyDown (KeyCode.T)) {
 			throwToScore = !throwToScore;
 		}
 
@@ -163,16 +139,16 @@ public class GameManager : MonoBehaviour {
 	public void StartGodMode(PlayerController god){
 		switch (god.PlayerId) {
 		case 1:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.bearGod);
+			soundManager.PlaySound (SoundManager.SoundType.bearGod);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseGod);
+			soundManager.PlaySound (SoundManager.SoundType.mooseGod);
 			break;
 		case 3:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverGod);
+			soundManager.PlaySound (SoundManager.SoundType.beaverGod);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (GameManager.SoundType.loonGod);
+			soundManager.PlaySound (SoundManager.SoundType.loonGod);
 			break;
 		}
 

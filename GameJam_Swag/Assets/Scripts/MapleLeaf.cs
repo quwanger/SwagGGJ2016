@@ -14,7 +14,7 @@ public class MapleLeaf : MonoBehaviour {
 	private const float zoomConstant = 7f;
 	private bool cameraZooming = false;
 
-	public GameManager gameManager;
+	public SoundManager soundManager;
 
 	private int checkDelay = 0;
 	private int checkDelayMax = 3;
@@ -23,7 +23,7 @@ public class MapleLeaf : MonoBehaviour {
 	void Start () {
 		this.gameObject.GetComponent<SpriteRenderer> ().color = leafColor;
 
-		gameManager = FindObjectOfType<GameManager> ();
+		soundManager = FindObjectOfType<SoundManager> ();
 	}
 	
 	// Update is called once per frame
@@ -62,7 +62,7 @@ public class MapleLeaf : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
-		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
+		soundManager.PlaySound (SoundManager.SoundType.grab);
 
 		GameObject hitPart = Instantiate (Resources.Load<GameObject> ("Prefabs/hitParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
 		hitPart.transform.parent = this.transform;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SpawnManager : MonoBehaviour {
 
 	public GameManager gameManager;
+    public SoundManager soundManager;
 
 	public GameObject mapleLeaf;
 
@@ -28,7 +29,8 @@ public class SpawnManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = this.gameObject.transform.GetComponent<GameManager> ();
-	}
+        soundManager = this.gameObject.transform.GetComponent<SoundManager>();
+    }
 
 	// Initialize possible colors array
 	public void Initiate()
@@ -72,7 +74,7 @@ public class SpawnManager : MonoBehaviour {
 					go.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite> ("Sprites/text_go" + Random.Range(1,3).ToString()) as Sprite;
 					Destroy (go, 0.75f);
 
-					gameManager.soundManager.PlaySound (GameManager.SoundType.intro);
+					soundManager.PlaySound (SoundManager.SoundType.intro);
 
 					StartGame ();
 				}
@@ -113,7 +115,7 @@ public class SpawnManager : MonoBehaviour {
 		//gameStartMessage = Instantiate<GameObject> (Resources.Load<GameObject> ("Prefabs/GameStart"));
 		if (!gameHasStarted) {
 			//Debug.Log ("PLAYING SOUND");
-			gameManager.soundManager.PlaySound (GameManager.SoundType.countDown);
+			soundManager.PlaySound (SoundManager.SoundType.countDown);
 		}
 
 		countdownStart = true;
