@@ -10,7 +10,6 @@ public class Base : MonoBehaviour {
 	public GameObject vulnerableGem;
 	public SpawnManager spawnManager;
 	public GameManager gameManager;
-    public SoundManager soundManager;
 
 	private GameObject gettingCloseTitle;
 	private GameObject gettingCloseCharacter;
@@ -18,8 +17,7 @@ public class Base : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
-        soundManager = FindObjectOfType<SoundManager>();
-        spawnManager = FindObjectOfType<SpawnManager> ();
+		spawnManager = FindObjectOfType<SpawnManager> ();
 	}
 	
 	// Update is called once per frame
@@ -35,7 +33,7 @@ public class Base : MonoBehaviour {
 				if (player.PlayerId == this.playerId) {
 					if (player.pState == PlayerController.playerState.Carrying || player.pState == PlayerController.playerState.Throwing) {
 						if (player.leafInArms.GetComponent<MapleLeaf> ().leafColor == player.activeColor) {
-							soundManager.PlaySound (SoundManager.SoundType.leafYes);
+							gameManager.soundManager.PlaySound (GameManager.SoundType.leafYes);
 							GameObject crackPart = Instantiate (Resources.Load<GameObject> ("Prefabs/crackParticle"), new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity) as GameObject;
 							crackPart.GetComponent<ParticleSystem> ().startColor = player.activeColor;
 							crackPart.transform.parent = this.transform;
@@ -96,7 +94,7 @@ public class Base : MonoBehaviour {
 								// player.gameManager.spawnManager.SpawnLeaf();
 							}
 						} else {
-							soundManager.PlaySound (SoundManager.SoundType.leafNo);
+							gameManager.soundManager.PlaySound (GameManager.SoundType.leafNo);
 
 							//don't score!
 							//Debug.Log ("WRONG BASE NOOB!");
@@ -110,7 +108,7 @@ public class Base : MonoBehaviour {
 					PlayerController player = collider.gameObject.GetComponent<MapleLeaf> ().thrower;
 					if (player.PlayerId == this.playerId) {
 						if (collider.gameObject.GetComponent<MapleLeaf> ().leafColor == player.activeColor) {
-							soundManager.PlaySound (SoundManager.SoundType.leafYes);
+							gameManager.soundManager.PlaySound (GameManager.SoundType.leafYes);
 							GameObject crackPart = Instantiate (Resources.Load<GameObject> ("Prefabs/crackParticle"), new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity) as GameObject;
 							crackPart.GetComponent<ParticleSystem> ().startColor = player.activeColor;
 							crackPart.transform.parent = this.transform;
@@ -160,7 +158,7 @@ public class Base : MonoBehaviour {
 								player.playerShadow.color = player.activeColor;
 							}
 						} else {
-							soundManager.PlaySound (SoundManager.SoundType.leafNo);
+							gameManager.soundManager.PlaySound (GameManager.SoundType.leafNo);
 						}
 					}
 				}

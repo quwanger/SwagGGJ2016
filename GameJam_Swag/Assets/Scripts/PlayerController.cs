@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour {
 
 	public PlayerManager playerManager;
 	public GameManager gameManager;
-    public SoundManager soundManager;
 
     public Camera mainCamera;
 	public int playerId = 1;
@@ -73,7 +72,6 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = FindObjectOfType<GameManager> ();
-        soundManager = FindObjectOfType<SoundManager> ();
 
 		rb = this.gameObject.GetComponent<Rigidbody2D> ();
 
@@ -242,7 +240,7 @@ public class PlayerController : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		soundManager.PlaySound (SoundManager.SoundType.grab);
+		gameManager.soundManager.PlaySound (GameManager.SoundType.grab);
 		
 		GameObject hitPart = Instantiate (Resources.Load<GameObject> ("Prefabs/hitParticle"), new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z),Quaternion.identity) as GameObject;
 		hitPart.transform.parent = this.transform;
@@ -328,16 +326,16 @@ public class PlayerController : MonoBehaviour {
 		// Play correct sound for correct player
 		switch (playerId) {
 		case 1:
-			soundManager.PlaySound (SoundManager.SoundType.bear);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			gameManager.soundManager.PlaySound (SoundManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		case 3:
-			gameManager.soundManager.PlaySound (SoundManager.SoundType.beaver);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			gameManager.soundManager.PlaySound (SoundManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		}
 
@@ -359,16 +357,16 @@ public class PlayerController : MonoBehaviour {
 
 		switch (playerId) {
 		case 1:
-			soundManager.PlaySound (SoundManager.SoundType.bear);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bear);
 			break;
 		case 2:
-			soundManager.PlaySound (SoundManager.SoundType.moose);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.moose);
 			break;
 		case 3:
-			soundManager.PlaySound (SoundManager.SoundType.beaver);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaver);
 			break;
 		case 4:
-			soundManager.PlaySound (SoundManager.SoundType.loon);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loon);
 			break;
 		}
 
@@ -383,16 +381,16 @@ public class PlayerController : MonoBehaviour {
 		// Play correct sound for correct player
 		switch (playerId) {
 		case 1:
-			soundManager.PlaySound (SoundManager.SoundType.bearFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.bearFire);
 			break;
 		case 2:
-			soundManager.PlaySound (SoundManager.SoundType.mooseFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.mooseFire);
 			break;
 		case 3:
-			soundManager.PlaySound (SoundManager.SoundType.beaverFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.beaverFire);
 			break;
 		case 4:
-			soundManager.PlaySound (SoundManager.SoundType.loonFire);
+			gameManager.soundManager.PlaySound (GameManager.SoundType.loonFire);
 			break;
 		}
 
